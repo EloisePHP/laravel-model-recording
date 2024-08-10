@@ -1,0 +1,42 @@
+{
+    "name": "eloise/laravel-data-audit",
+    "description": "This laravel package help us to register every model activities",
+    "type": "library",
+    "authors": [
+        {
+            "name": "eloise",
+            "email": "eloise@example.com"
+        }
+    ],
+    "require": {
+        "php": "^8.3",
+        "laravel/framework": "^11.0",
+        "symfony/finder": "^6|^7",
+        "phpunit/phpunit": "^11.3",
+        "mockery/mockery": "^1.5",
+        "orchestra/testbench": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Eloise\\DataAudit\\": "src/",
+            "Vendor\\Package\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Vendor\\Package\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Eloise\\DataAudit\\DataAuditServiceProvider"
+            ],
+            "aliases": {
+                "Debugbar": "Eloise\\DataAudit\\Facade"
+            }
+        }
+    }
+}
