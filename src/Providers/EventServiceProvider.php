@@ -8,11 +8,11 @@ use Eloise\DataAudit\Listeners\LoggingAuditListener;
 
 class EventServiceProvider extends IlluminateEventServiceProvider
 {
-//    protected $listen = [
-//        LoggingAuditEvent::class => [
-//            [LoggingAuditListener::class, 'onAudit'],
-//        ],
-//    ];
+    protected $listen = [
+        LoggingAuditEvent::class => [
+            [LoggingAuditListener::class, 'onAudit'],
+        ],
+    ];
 
     public function boot(): void
     {
