@@ -1,0 +1,21 @@
+# Ignore vendor directory
+/vendor/
+
+# Ignore environment files
+.env
+.env.testing
+
+# Ignore IDE settings
+.idea/
+
+# Ignore PHPUnit cache files
+.phpunit.cache/
+.phpunit.result.cache
+
+# Ignore other cache or log files
+*.log
+*.cache
+
+# Ignore system files
+.DS_Store
+Thumbs.db
