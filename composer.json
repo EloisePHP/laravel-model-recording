@@ -1,7 +1,9 @@
 {
     "name": "eloise/laravel-data-audit",
+    "version": "0.1.0",
     "description": "This laravel package help us to register every model activities",
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "eloise",
