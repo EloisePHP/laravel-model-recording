@@ -40,9 +40,9 @@ class AuditableClassRefreshCommand extends Command
         $this->table($headers, $auditableModels);
 
         foreach ($auditableModels as $auditableModel) {
-            $load = new LoadAuditableClassFromArray($auditableModel);
-            $load->loadAuditableClass();
-            $load->loadDefaultActions();
+            $load = new LoadAuditableClassFromArray();
+            $auditableModel = $load->loadAuditableClass($auditableModel);
+            $load->loadDefaultActions($auditableModel);
         }
     }
 }

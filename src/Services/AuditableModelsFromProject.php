@@ -14,14 +14,16 @@ class AuditableModelsFromProject
      *
      * @throws Exception
      */
-    public function getAuditableModels(): ?array
+    public function getAuditableModels(): array
     {
         $auditableModels = [];
-        $files = File::allFiles(app_path('Models'));
+        $paths = new PathNames();
+        $namespace = $paths->getProjectModelsPath();
 
+        $files = File::allFiles(app_path($namespace));
         foreach ($files as $file) {
-            $namespace = PathNames::PROJECT_MODELS;
-            $className = $namespace . pathinfo($file->getFilename(), PATHINFO_FILENAME);
+            $prefixClassName = $paths->getPrefixClassName();
+            $className =  $prefixClassName . pathinfo($file->getFilename(), PATHINFO_FILENAME);
 
             if (!class_exists($className)) {
                 $errorMessage = sprintf('Class %s does not exist.', $className);
