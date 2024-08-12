@@ -7,6 +7,9 @@ use Eloise\DataAudit\Contracts\AuditableModel;
 use Eloise\DataAudit\Models\AuditableClass;
 use Eloise\DataAudit\Models\AuditAction;
 
+/**
+ * @deprecated
+ */
 class AuditableClassSupplier
 {
     public function getAuditableClassFromModel(AuditableModel $model)

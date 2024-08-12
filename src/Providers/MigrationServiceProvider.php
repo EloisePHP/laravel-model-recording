@@ -2,7 +2,6 @@
 
 namespace Eloise\DataAudit\Providers;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 
 class MigrationServiceProvider extends ServiceProvider
