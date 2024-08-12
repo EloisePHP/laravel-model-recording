@@ -18,7 +18,7 @@ class AuditModelManager
     public function createAudit(AuditableModel $auditableModel, string $action): Audit
     {
         $auditAction = $this->supplier->getActionClassFromModel($auditableModel, $action);
-
+        
         $audit = new Audit();
 
         $sourceClass = $auditableModel->getSourceModelClass();
@@ -30,7 +30,7 @@ class AuditModelManager
         $audit->setAuditAction()->associate($auditAction);
 
         $currentUser = Auth::user();
-        $currentUserId = 1;
+        $currentUserId = 0;
         if ($currentUser instanceof User) {
             $currentUserId = $currentUser->id;
         }

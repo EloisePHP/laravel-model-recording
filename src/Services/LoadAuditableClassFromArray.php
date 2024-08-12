@@ -8,39 +8,37 @@ use Eloise\DataAudit\Models\AuditAction;
 
 class LoadAuditableClassFromArray
 {
-    public function __construct(
-        protected array $auditModel,
-    ) {
-    }
 
-    public function loadAuditableClass(): void
+    public function loadAuditableClass(array $auditModel): array
     {
         $auditableClass = AuditableClass::updateOrCreate(
-            ['class_name' => $this->auditModel['class_name']],
+            ['class_name' => $auditModel['class_name']],
             [
-                'name' => $this->auditModel['short_name'],
-                'default' => $this->auditModel['default'],
-                'active' => $this->auditModel['active'],
-                'version' => $this->auditModel['version'],
+                'name' => $auditModel['short_name'],
+                'default' => $auditModel['default'],
+                'active' => $auditModel['active'],
+                'version' => $auditModel['version'],
             ]
         );
 
-        $this->auditModel['auditable_id'] = (int) $auditableClass->id;
+        $auditModel['auditable_id'] = (int) $auditableClass->id;
+
+        return $auditModel;
     }
 
-    public function loadDefaultActions(): void
+    public function loadDefaultActions(array $auditModel): void
     {
         foreach (Actions::DEFAULT_ACTIONS as $action) {
             AuditAction::updateOrCreate(
                 [
                     'name' => $action,
-                    'eloise_audit_class_id' => $this->auditModel['auditable_id'],
+                    'eloise_audit_class_id' => $auditModel['auditable_id'],
                 ],
                 [
-                    'description' => sprintf('%s %s', "Default action for ", Actions::ACTION_CREATED),
-                    'version' => $this->auditModel['version'],
-                    'source_class' => $this->auditModel['source_class'],
-                    'target_class' => $this->auditModel['source_class'],
+                    'description' => sprintf('%s%s', "Default action for ", Actions::ACTION_CREATED),
+                    'version' => $auditModel['version'],
+                    'source_class' => $auditModel['source_class'],
+                    'target_class' => $auditModel['source_class'],
                 ]
             );
         }

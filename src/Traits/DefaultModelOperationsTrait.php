@@ -15,13 +15,12 @@ use Webmozart\Assert\Assert;
  */
 trait DefaultModelOperationsTrait
 {
-    protected static function boot(): void
+    protected static function bootDefaultModelOperationsTrait(): void
     {
-
-        parent::boot();
+        //parent::boot();
 
         Assert::subclassOf(static::class, Model::class, static::errorMessage());
-
+        
         static::created(fn($model) => static::logAuditEvent($model, Actions::ACTION_CREATED));
         static::updated(fn($model) => static::logAuditEvent($model, Actions::ACTION_UPDATED));
         static::deleted(fn($model) => static::logAuditEvent($model, Actions::ACTION_DELETED));

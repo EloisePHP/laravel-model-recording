@@ -19,7 +19,7 @@
     "autoload": {
         "psr-4": {
             "Eloise\\DataAudit\\": "src/",
-            "Vendor\\Package\\": "src/"
+            "Eloise\\DataAudit\\Tests\\": "tests/"
         }
     },
     "autoload-dev": {
@@ -38,5 +38,8 @@
                 "Debugbar": "Eloise\\DataAudit\\Facade"
             }
         }
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.23"
     }
 }
