@@ -26,21 +26,32 @@ class LoadAuditableClassFromArray
         return $auditModel;
     }
 
-    public function loadDefaultActions(array $auditModel): void
+    public function loadActions(array $auditModel, string $action = null): void
     {
-        foreach (Actions::DEFAULT_ACTIONS as $action) {
-            AuditAction::updateOrCreate(
-                [
-                    'name' => $action,
-                    'eloise_audit_class_id' => $auditModel['auditable_id'],
-                ],
-                [
-                    'description' => sprintf('%s%s', "Default action for ", Actions::ACTION_CREATED),
-                    'version' => $auditModel['version'],
-                    'source_class' => $auditModel['source_class'],
-                    'target_class' => $auditModel['source_class'],
-                ]
-            );
+        $actionsArray = $auditModel['default'] ? Actions::DEFAULT_ACTIONS : [];
+        if ($action !== null && !in_array($action, $actionsArray)){
+            $actionsArray[] = $action;
         }
+   
+        foreach ($actionsArray as $action) {
+            $this->updateOrCreateAction($auditModel, $action);
+        }
+        
+    }
+
+    public function updateOrCreateAction(array $auditModel, string $action)
+    {
+        AuditAction::updateOrCreate(
+            [
+                'name' => $action,
+                'eloise_audit_class_id' => $auditModel['auditable_id'],
+            ],
+            [
+                'description' => sprintf('%s%s', "Default action for ", Actions::ACTION_CREATED),
+                'version' => $auditModel['version'],
+                'source_class' => $auditModel['source_class'],
+                'target_class' => $auditModel['source_class'],
+            ]
+        );
     }
 }

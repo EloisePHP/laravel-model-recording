@@ -14,7 +14,6 @@ use Illuminate\Support\Carbon;
  * @property int $eloise_audit_class_id
  * @property string $name
  * @property string $source_class
- * @property string|null $target_class
  * @property string|null $description
  * @property string $version
  * @property array|null $serialized_data

@@ -2,10 +2,7 @@
 
 namespace Eloise\DataAudit\Tests;
 
-use Eloise\DataAudit\Constants\PathNames;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 abstract class TestCase extends OrchestraTestCase

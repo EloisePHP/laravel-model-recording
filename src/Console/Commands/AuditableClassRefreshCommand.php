@@ -37,12 +37,15 @@ class AuditableClassRefreshCommand extends Command
         ];
 
         $auditableModels = $auditableModelsFromProject->getAuditableModels();
+        $this->info('All Auditable Models');
         $this->table($headers, $auditableModels);
 
         foreach ($auditableModels as $auditableModel) {
             $load = new LoadAuditableClassFromArray();
             $auditableModel = $load->loadAuditableClass($auditableModel);
-            $load->loadDefaultActions($auditableModel);
+            $load->loadActions($auditableModel);
         }
+
+        $this->info('All Auditable Models classes and Auditable Actions were saved in the database.');
     }
 }

@@ -10,8 +10,8 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
- * @property int $user_id
- * @property int $eloise_audit_action_id
+ * @property int|null $user_id
+ * @property int|null $eloise_audit_action_id
  * @property string $action
  * @property string $source_class
  * @property int $source_id

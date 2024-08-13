@@ -20,8 +20,8 @@ return new class extends Migration
     {
         Schema::create('eloise_audit', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->integer('eloise_audit_action_id');
+            $table->integer('user_id')->nullable();
+            $table->integer('eloise_audit_action_id')->nullable();
             $table->string('action');
             $table->string('source_class', 255);
             $table->integer('source_id');
