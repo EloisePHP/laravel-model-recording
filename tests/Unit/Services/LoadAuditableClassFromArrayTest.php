@@ -58,7 +58,7 @@ class LoadAuditableClassFromArrayTest extends TestCase
         $this->auditModel = $service->loadAuditableClass($this->auditModel);
 
         // Now load the default actions
-        $service->loadDefaultActions($this->auditModel);
+        $service->loadActions($this->auditModel);
 
         // Verify that the default actions were created
         foreach (Actions::DEFAULT_ACTIONS as $action) {

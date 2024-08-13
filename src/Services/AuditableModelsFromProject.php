@@ -2,6 +2,7 @@
 
 namespace Eloise\DataAudit\Services;
 
+use Eloise\DataAudit\Builder\ArrayFromAuditableContractBuilder;
 use Eloise\DataAudit\Constants\PathNames;
 use Exception;
 use Illuminate\Support\Facades\File;
@@ -38,16 +39,8 @@ class AuditableModelsFromProject
 
             $modelClass = new $className();
 
-            $auditableModels[] = [
-                'class_name' => $className,
-                'short_name' => $reflectionClass->getShortName(),
-                'default' => $modelClass->defaultAudit(),
-                'active' => $modelClass->activeAudit(),
-                'version' => $modelClass->versionAudit(),
-                'source_class' => $modelClass->getSourceModelClass(),
-            ];
-
-
+            $builder = new ArrayFromAuditableContractBuilder($modelClass);
+            $auditableModels[] = $builder->toArray();
         }
 
         return $auditableModels;

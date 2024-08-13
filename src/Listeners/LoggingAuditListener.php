@@ -20,6 +20,5 @@ class LoggingAuditListener implements ShouldQueue
         $action = $event->getAuditAction();
 
         $this->auditModelManager->createAudit($auditableModel, $action);
-
     }
 }
