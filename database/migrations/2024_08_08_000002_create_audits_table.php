@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         $this->createAuditTable();
-
+        $this->addIndexesToAuditTable();
         $this->addForeignKeysToAudit();
     }
 
@@ -36,6 +36,16 @@ return new class extends Migration
         });
     }
 
+    public function addIndexesToAuditTable(): void
+    {
+        Schema::table('eloise_audit', function (Blueprint $table) {
+            $table->index('user_id');
+
+            $table->index(['source_id', 'source_class']);
+            $table->index(['target_id', 'target_class']);
+        });
+    }
+
     public function addForeignKeysToAudit(): void
     {
         Schema::table('eloise_audit', static function (Blueprint $table): void {
@@ -50,6 +60,12 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('eloise_audit', function (Blueprint $table) {
+            $table->dropIndex(['user_id']);
+
+            $table->dropIndex(['source_id', 'source_class']);
+            $table->dropIndex(['target_id', 'target_class']);
+        });
         Schema::dropIfExists('eloise_audit');
     }
 };
