@@ -29,7 +29,7 @@ return new class extends Migration
             $table->integer('target_id')->nullable();
             $table->string('message', 255)->nullable();
             $table->string('version', 255)->nullable();
-            $table->json('diff', 255)->nullable();
+            $table->json('changes', 255)->nullable();
             $table->string('link', 255)->nullable();
             $table->timestamps();
             $table->json('serialized_data')->nullable();

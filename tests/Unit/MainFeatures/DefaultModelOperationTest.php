@@ -3,7 +3,7 @@
 namespace Eloise\DataAudit\Tests;
 
 use Eloise\DataAudit\Constants\Actions;
-use Eloise\DataAudit\Events\LoggingAuditEvent;
+use Eloise\DataAudit\Constants\AuditableProperties;
 use Eloise\DataAudit\Models\Audit;
 use Eloise\DataAudit\Tests\Fixtures\Models\DefaultAuditableModel;
 use Faker\Factory as Faker;
@@ -22,9 +22,6 @@ class DefaultModelOperationTest extends TestCase
 
         $this->assertTrue(Auth::check());
         $this->assertEquals(Auth::id(), $user->id);
-
-        //Command to get all Auditable Classes + Actions
-        $this->artisan('audit:class:refresh');
 
         // Creating DefaultAuditableModels
         $randomNumber = rand(1,20);
@@ -52,7 +49,7 @@ class DefaultModelOperationTest extends TestCase
         }
     }
 
-    public function test_audits_on_updated_model()
+    public function test_audits_on_updating_models()
     {
         $user = $this->createTestUser();
 
@@ -97,6 +94,13 @@ class DefaultModelOperationTest extends TestCase
             $auditUpdated = $audits->firstWhere('action', Actions::ACTION_UPDATED);
             $this->assertNotEmpty($auditUpdated);
             $this->assertEquals($model->getSourceModelClass(),$auditUpdated->source_class);
+
+            // Checking the changes property everything has been saved correctly
+            $createdChanges = $this->getSpecificAttribute($auditCreated->changes, 'test_name');
+            $updatedChanges = $this->getSpecificAttribute($auditUpdated->changes, 'test_name');
+
+            $this->assertEquals($createdChanges[AuditableProperties::NEW_VALUE],$updatedChanges[AuditableProperties::ORIGINAL_VALUE]);
+            $this->assertEquals($createdChanges[AuditableProperties::NEW_VALUE] . ' updated', $updatedChanges[AuditableProperties::NEW_VALUE]);
         }
     }
 
@@ -140,4 +144,16 @@ class DefaultModelOperationTest extends TestCase
 
         return $randomNames;
     }
+
+    public function getSpecificAttribute(array $changes, string $attribute): array
+    {
+        $createdValue=[];
+        foreach($changes as $value) {
+            if (isset($value[$attribute])) {
+                $createdValue = $value[$attribute];
+            }
+        }
+
+        return $createdValue;
+        }
 }

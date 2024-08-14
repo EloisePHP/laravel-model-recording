@@ -14,4 +14,7 @@ interface AuditableModel
     public function activeAudit(): bool;
     public function versionAudit(): string;
 
+    //Methods comming from Model class
+    public function getDirty();
+
 }
