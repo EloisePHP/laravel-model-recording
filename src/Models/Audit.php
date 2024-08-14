@@ -61,4 +61,21 @@ class Audit extends Model
     {
         return $this->belongsTo(AuditAction::class, 'eloise_audit_action_id');
     }
+
+    public function toArrayForTable(): array
+    {
+        return [
+            $this->id,
+            $this->user_id,
+            $this->action,
+            $this->source_class,
+            $this->source_id,
+            $this->target_class,
+            $this->target_id,
+            $this->message,
+            $this->version,
+            $this->created_at,
+            $this->updated_at,
+        ];
+    }
 }

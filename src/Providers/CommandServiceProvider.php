@@ -2,8 +2,8 @@
 
 namespace Eloise\DataAudit\Providers;
 
-use Eloise\DataAudit\Console\Commands\ActionRegisterCommand;
-use Eloise\DataAudit\Console\Commands\AuditableClassRefreshCommand;
+use Eloise\DataAudit\Console\Commands\AuditableClassCommand;
+use Eloise\DataAudit\Console\Commands\AuditsFromClassCommand;
 use Illuminate\Support\ServiceProvider;
 
 class CommandServiceProvider extends ServiceProvider
@@ -16,8 +16,8 @@ class CommandServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                AuditableClassRefreshCommand::class,
-                ActionRegisterCommand::class
+                AuditsFromClassCommand::class,
+                AuditableClassCommand::class,
             ]);
         }
     }

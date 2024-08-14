@@ -16,7 +16,8 @@
         "symfony/finder": "^6|^7",
         "phpunit/phpunit": "^11.3",
         "mockery/mockery": "^1.5",
-        "orchestra/testbench": "*"
+        "orchestra/testbench": "*",
+        "laravel/prompts": "^0.1.24"
     },
     "autoload": {
         "psr-4": {

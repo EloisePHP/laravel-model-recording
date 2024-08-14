@@ -14,6 +14,8 @@ class MigrationTest extends TestCase
             'eloise_audit_action',
             'eloise_auditable_class',
             'test_eloise_auditable_model',
+            'test_eloise_comment',
+            'test_eloise_post',
             'users',
             'failed_jobs',
             'job_batches',

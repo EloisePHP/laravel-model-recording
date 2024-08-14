@@ -13,6 +13,7 @@ interface AuditableModel
     public function defaultAudit(): bool;
     public function activeAudit(): bool;
     public function versionAudit(): string;
+    //public function authRequiredAudit(): bool;
 
     //Methods comming from Model class
     public function getDirty();

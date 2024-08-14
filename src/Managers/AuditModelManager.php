@@ -25,7 +25,6 @@ class AuditModelManager
 
         $currentUser = Auth::user();
 
-        $audit->user_id = null;
         if ($currentUser instanceof User) {
             $audit->user_id = $currentUser->id;
         }

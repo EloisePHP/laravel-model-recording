@@ -1,11 +1,12 @@
 <?php
 
-namespace Eloise\DataAudit\Tests;
+namespace Eloise\DataAudit\Tests\Unit\MainFeatures;
 
 use Eloise\DataAudit\Constants\Actions;
 use Eloise\DataAudit\Constants\AuditableProperties;
 use Eloise\DataAudit\Models\Audit;
 use Eloise\DataAudit\Tests\Fixtures\Models\DefaultAuditableModel;
+use Eloise\DataAudit\Tests\TestCase;
 use Faker\Factory as Faker;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
@@ -57,9 +58,6 @@ class DefaultModelOperationTest extends TestCase
 
         $this->assertTrue(Auth::check());
         $this->assertEquals(Auth::id(), $user->id);
-
-        //Command to get all Auditable Classes + Actions
-        $this->artisan('audit:class:refresh');
 
         // Creating DefaultAuditableModels
         $numberOfCreatedModels = rand(10,20);
