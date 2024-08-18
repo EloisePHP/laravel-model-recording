@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DefaultAuditableModel extends Model implements AuditableModel
 {
-    use HasFactory, AuditableModelTrait;
+    use HasFactory;
+    use AuditableModelTrait;
 
     protected $table = 'test_eloise_auditable_model';
-    
+
     protected $fillable = [
         'test_name',
     ];

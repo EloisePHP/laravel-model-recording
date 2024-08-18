@@ -3,7 +3,8 @@
 namespace Eloise\DataAudit\Traits;
 
 /**
- * This is a Trait that must be used in a Model you want to Audit, it sets up the basic functionalities of the DataAudit Package.
+ * This is a Trait that must be used in a Model you want to Audit,
+ * it sets up the basic functionalities of the DataAudit Package.
  */
 trait AuditableModelTrait
 {

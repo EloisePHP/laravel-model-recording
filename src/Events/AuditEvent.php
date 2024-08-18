@@ -9,7 +9,9 @@ use Illuminate\Queue\SerializesModels;
 
 class AuditEvent
 {
-    use Dispatchable, SerializesModels, InteractsWithSockets;
+    use Dispatchable;
+    use SerializesModels;
+    use InteractsWithSockets;
 
     public function __construct(
         protected AuditableModel $auditableModel,

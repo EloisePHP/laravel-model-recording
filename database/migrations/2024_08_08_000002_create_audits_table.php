@@ -50,8 +50,10 @@ return new class extends Migration
     {
         Schema::table('eloise_audit', static function (Blueprint $table): void {
 
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('eloise_audit_action_id')->references('id')->on('eloise_audit_action')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('user_id')
+                        ->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('eloise_audit_action_id')
+                        ->references('id')->on('eloise_audit_action')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

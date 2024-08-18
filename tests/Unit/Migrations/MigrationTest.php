@@ -25,7 +25,7 @@ class MigrationTest extends TestCase
             'sessions',
         ];
 
-        foreach($expectedTables as $table) {
+        foreach ($expectedTables as $table) {
             $this->assertTrue(Schema::hasTable($table), "Table $table does not exist.");
         }
     }

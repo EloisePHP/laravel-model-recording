@@ -14,7 +14,6 @@ return new class extends Migration
         $this->createAuditActionTable();
 
         $this->addForeignKeysToAuditAction();
-
     }
 
     public function createAuditActionTable(): void
@@ -35,7 +34,8 @@ return new class extends Migration
     {
         Schema::table('eloise_audit_action', static function (Blueprint $table): void {
 
-            $table->foreign('eloise_audit_class_id')->references('id')->on('eloise_auditable_class')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('eloise_audit_class_id')
+                        ->references('id')->on('eloise_auditable_class')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

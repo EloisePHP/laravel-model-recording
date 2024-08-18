@@ -8,7 +8,6 @@ use Eloise\DataAudit\Models\AuditAction;
 
 class LoadAuditableClassFromArray
 {
-
     public function loadAuditableClass(array $auditModel): array
     {
         $auditableClass = AuditableClass::updateOrCreate(
@@ -29,14 +28,13 @@ class LoadAuditableClassFromArray
     public function loadActions(array $auditModel, string $action = null): void
     {
         $actionsArray = $auditModel['default'] ? Actions::DEFAULT_ACTIONS : [];
-        if ($action !== null && !in_array($action, $actionsArray)){
+        if ($action !== null && !in_array($action, $actionsArray)) {
             $actionsArray[] = $action;
         }
-   
+
         foreach ($actionsArray as $action) {
             $this->updateOrCreateAction($auditModel, $action);
         }
-        
     }
 
     public function updateOrCreateAction(array $auditModel, string $action)
