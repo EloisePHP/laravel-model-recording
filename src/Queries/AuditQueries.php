@@ -2,12 +2,11 @@
 
 namespace Eloise\DataAudit\Queries;
 
+use Eloise\DataAudit\Constants\Queries;
 use Eloise\DataAudit\Models\Audit;
-use Illuminate\Database\Eloquent\Collection;
 
 class AuditQueries 
 {
-    public const CHUNK_SIZE = 100;
 
     public function getAuditFromUserAndModelId(
         string $modelName,
@@ -18,54 +17,34 @@ class AuditQueries
     {
         $query = Audit::query();
 
-        // If both $modelId and $userId are null
-        if ($modelId === null && $userId === null) {
-            $query->where('source_class', $modelName)
+        $baseCondition = function ($q) use ($modelId, $userId, $modelName) {
+            if ($modelId !== null) {
+                $q->where('source_id', $modelId)->where('source_class', $modelName)
+                  ->orWhere(function ($subQuery) use ($modelId, $modelName) {
+                      $subQuery->where('target_id', $modelId)->where('target_class', $modelName);
+                  });
+            } else {
+                $q->where('source_class', $modelName)
                   ->orWhere('target_class', $modelName);
             }
-        // If only $modelId is null
-        elseif ($modelId === null) {
-            $query->where(function ($q) use ($userId, $modelName) {
-                $q->where('user_id', $userId)
-                ->where(function ($subQuery) use ($modelName) {
-                    $subQuery->where('source_class', $modelName)
-                            ->orWhere('target_class', $modelName);
-                });
+        };
+        
+        // Adding user condition
+        if ($userId !== null) {
+            $query->where(function ($q) use ($baseCondition, $userId) {
+                $q->where('user_id', $userId)->where($baseCondition);
             });
-        }
-        // If only $userId is null
-        elseif ($userId === null) {
-            $query->where(function ($q) use ($modelId, $modelName) {
-                $q->where(function ($subQuery) use ($modelId, $modelName) {
-                    $subQuery->where('source_id', $modelId)
-                            ->where('source_class', $modelName);
-                })
-                ->orWhere(function ($subQuery) use ($modelId, $modelName) {
-                    $subQuery->where('target_id', $modelId)
-                            ->where('target_class', $modelName);
-                });
-            });
-        }
-        // Both $modelId and $userId are not null
-        else {
-            $query->where(function ($q) use ($modelId, $userId, $modelName) {
-                $q->where('user_id', $userId)
-                ->where(function ($subQuery) use ($modelId, $modelName) {
-                    $subQuery->where('source_id', $modelId)
-                            ->where('source_class', $modelName);
-                })
-                ->orWhere(function ($subQuery) use ($modelId, $modelName, $userId) {
-                    $subQuery->where('user_id', $userId)
-                            ->where('target_id', $modelId)
-                            ->where('target_class', $modelName);
-                });
-            });
+        } else {
+            $query->where($baseCondition);
         }
 
         $query->orderBy('created_at', 'desc');
-        // Process the query results in chunks
-        $query->chunk(self::CHUNK_SIZE, function ($audits) use ($callback) {
-            $callback($audits);
+        $query->chunk(Queries::CHUNK_SIZE, function ($audits) use ($callback) {
+            $shouldContinue = $callback($audits);
+            
+            if ($shouldContinue === false) {
+                return false;
+            }
         });
     }
 }

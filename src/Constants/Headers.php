@@ -4,6 +4,15 @@ namespace Eloise\DataAudit\Constants;
 
 class Headers
 {
+    public const array AUDITABLE_CLASSES_HEADER = [
+        'Class name',
+        'Short classname',
+        'Default',
+        'Active',
+        'Version',
+        'Source Class',
+    ];
+    
     public const array AUDIT_HEADERS = [
         'id',
         'user_id',

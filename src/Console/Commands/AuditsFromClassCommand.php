@@ -3,6 +3,7 @@
 namespace Eloise\DataAudit\Console\Commands;
 
 use Eloise\DataAudit\Constants\Headers;
+use Eloise\DataAudit\Constants\Queries;
 use Eloise\DataAudit\Queries\AuditQueries;
 use Eloise\DataAudit\Services\AuditableModelsFromProject;
 use Eloise\DataAudit\Services\LoadAuditableClassFromArray;
@@ -21,6 +22,7 @@ class AuditsFromClassCommand extends Command
     ) {  
         parent::__construct();
     }
+
     /**
      * @var string
      */
@@ -29,7 +31,7 @@ class AuditsFromClassCommand extends Command
     /**
      * @var string
      */
-    protected $description = 'Get all auditable models';
+    protected $description = 'Get audits from Model Name, Model Id and User Id';
 
     /**
      * @throws \Exception
@@ -40,42 +42,62 @@ class AuditsFromClassCommand extends Command
     {
         $modelName = $this->argument('modelName');
         if ($modelName === null) {
-            info('You must provide a model as an argument, for instance:');
+            info('You must provide a model Name as an argument');
             info($this->signature);
             return;
         }
 
-        info('Loading Auditable Models');
         $auditableModels = $auditableModelsFromProject->getAuditableModels();
+        $modelFound = false;
         foreach ($auditableModels as $auditableModel) {
             if($auditableModel['short_name'] === $modelName) {
                 $modelClassName = $auditableModel['class_name'];
+                $modelFound = true;
             }
             $load = new LoadAuditableClassFromArray();
             $load->loadAuditableClass($auditableModel);
+        }
+        if (!$modelFound) {
+            info($modelName . ' has not been found in the Auditable Models');
+            info('Check eloise:audit:class command to see all auditable Models');
+            return;
         }
 
         $modelId = $this->option('modelId');
         $userId = $this->option('userId');
 
-        $headers = Headers::AUDIT_HEADERS;
+        $this->getAuditsFromParameter($modelClassName, $modelId, $userId);
+    }
 
-        $this->auditQueries->getAuditFromUserAndModelId($modelClassName, $modelId, $userId, function ($audits) use ($headers, &$rows) {
+    public function getAuditsFromParameter(string $modelClassName, int|null $modelId, int|null $userId):void
+    {
+        $dataFound = false;
+        $this->auditQueries->getAuditFromUserAndModelId($modelClassName, $modelId, $userId, function ($audits) use (&$rows, &$dataFound) {
             $rows = [];
             foreach ($audits as $audit) {
                 $rows[] = $audit->toArrayForTable();
             }
-
-            info('Ordered from the most recent');
-
             table(
-                headers: $headers,
+                headers: Headers::AUDIT_HEADERS,
                 rows: $rows
             );
+            
+            //We check if we go inside once so we know we have found data beofre and we differentiate this case with the no data found
+            if (!$dataFound) {
+                $dataFound = true;
+            }
 
+            if(count($rows)<Queries::CHUNK_SIZE) {
+                return false;
+            }
+            
             if (!confirm('Do you want to load more data?', true)) {
                 return false;
             }
+            return true;
         });
+
+        $message = $dataFound ? 'No more Audits found' : 'No data found with the given parameters.';
+        info($message);
     }
 }

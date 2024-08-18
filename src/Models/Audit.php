@@ -5,6 +5,7 @@ namespace Eloise\DataAudit\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Carbon;
 
@@ -77,5 +78,15 @@ class Audit extends Model
             $this->created_at,
             $this->updated_at,
         ];
+    }
+
+    public function source(): MorphTo
+    {
+        return $this->morphTo(__FUNCTION__, 'source_class', 'source_id');
+    }
+
+    public function target(): MorphTo
+    {
+        return $this->morphTo(__FUNCTION__, 'source_class', 'source_id');
     }
 }

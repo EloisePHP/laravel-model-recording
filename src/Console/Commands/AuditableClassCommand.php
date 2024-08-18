@@ -2,10 +2,10 @@
 
 namespace Eloise\DataAudit\Console\Commands;
 
+use Eloise\DataAudit\Constants\Headers;
 use Eloise\DataAudit\Services\AuditableModelsFromProject;
 use Eloise\DataAudit\Services\LoadAuditableClassFromArray;
 use Illuminate\Console\Command;
-use Laravel\Prompts;
 
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\table;
@@ -31,18 +31,9 @@ class AuditableClassCommand extends Command
     {
         info('Getting all Auditable Models.');
 
-        $headers = [
-            'Class name',
-            'Short classname',
-            'Default',
-            'Active',
-            'Version',
-            'Source Class',
-        ];
-
         $auditableModels = $auditableModelsFromProject->getAuditableModels();
         table(
-            headers: $headers,
+            headers: Headers::AUDITABLE_CLASSES_HEADER,
             rows: $auditableModels
         );
         foreach ($auditableModels as $auditableModel) {
@@ -51,15 +42,5 @@ class AuditableClassCommand extends Command
         }
 
         info('All these classes were added to the database.');
-
-        /*
-        foreach ($auditableModels as $auditableModel) {
-            $load = new LoadAuditableClassFromArray();
-            $auditableModel = $load->loadAuditableClass($auditableModel);
-            $load->loadActions($auditableModel);
-        }
-
-        info('Getting all Auditable Models.')
-        */
     }
 }
