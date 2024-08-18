@@ -1,0 +1,27 @@
+grumphp:
+    stop_on_failure: true
+    testsuites:
+        default:
+            tasks: [composer, phpstan, phpcs, phpunit]
+
+    tasks:
+        composer:
+            strict: true
+
+        phpcs:
+            standard: PSR12
+            ignore_patterns:
+                - '*/vendor/*'
+
+        phpstan:
+            configuration: phpstan.neon
+            level: 7
+
+        phpunit:
+            config_file: phpunit.xml
+            always_execute: false
+
+        git_commit_message:
+            matchers:
+                - /#\d+/
+            case_insensitive: false
