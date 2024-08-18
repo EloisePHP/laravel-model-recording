@@ -33,6 +33,7 @@ class AuditableClassCommand extends Command
         $auditableModels = $auditableModelsFromProject->getAuditableModels();
         table(
             headers: Headers::AUDITABLE_CLASSES_HEADER,
+            /** @phpstan-ignore-next-line */
             rows: $auditableModels
         );
         foreach ($auditableModels as $auditableModel) {

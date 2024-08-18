@@ -14,7 +14,7 @@ class LoggingAuditListener
     ) {
     }
 
-    public function onAudit(AuditEvent $event): void
+    public function handle(AuditEvent $event): void
     {
         $auditableModel = $event->getAuditableModel();
         $action = $event->getAuditAction();

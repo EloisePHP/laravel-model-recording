@@ -28,8 +28,6 @@ use Illuminate\Support\Carbon;
  */
 class Audit extends Model
 {
-    use HasFactory;
-
     protected $table = 'eloise_audit';
 
     protected $fillable = [
@@ -53,16 +51,25 @@ class Audit extends Model
         'serialized_data' => 'array',
     ];
 
+    /**
+     * @return BelongsTo<User, Audit>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<AuditAction, Audit>
+     */
     public function setAuditAction(): BelongsTo
     {
         return $this->belongsTo(AuditAction::class, 'eloise_audit_action_id');
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function toArrayForTable(): array
     {
         return [
@@ -80,13 +87,19 @@ class Audit extends Model
         ];
     }
 
+    /**
+     * @return MorphTo<Model, Audit>
+     */
     public function source(): MorphTo
     {
         return $this->morphTo(__FUNCTION__, 'source_class', 'source_id');
     }
 
+    /**
+     * @return MorphTo<Model, Audit>
+     */
     public function target(): MorphTo
     {
-        return $this->morphTo(__FUNCTION__, 'source_class', 'source_id');
+        return $this->morphTo(__FUNCTION__, 'target_class', 'target_id');
     }
 }

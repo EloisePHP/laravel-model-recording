@@ -22,8 +22,6 @@ use Illuminate\Support\Carbon;
  */
 class AuditAction extends Model
 {
-    use HasFactory;
-
     protected $table = 'eloise_audit_action';
 
     protected $fillable = [
@@ -40,6 +38,9 @@ class AuditAction extends Model
         'serialized_data' => 'array',
     ];
 
+    /**
+     * @return BelongsTo<AuditableClass, AuditAction>
+     */
     public function setAuditableClass(): BelongsTo
     {
         return $this->belongsTo(AuditableClass::class, 'eloise_audit_class_id');

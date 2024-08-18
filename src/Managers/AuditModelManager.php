@@ -16,7 +16,10 @@ class AuditModelManager
 
         $sourceClass = $auditableModel->getSourceModelClass();
         $audit->source_class = $sourceClass;
+
+        /** @phpstan-ignore-next-line */
         $audit->source_id = $auditableModel->id;
+
         $audit->action = $action;
         $audit->version = $auditableModel->versionAudit();
 
@@ -32,7 +35,13 @@ class AuditModelManager
         return $audit;
     }
 
-    public function getChangesInAuditableModel($auditableModel): array
+    /**
+     * Get the changes in the auditable model.
+     *
+     * @param AuditableModel $auditableModel
+     * @return array<int, array<string, array<string, mixed>>>
+     */
+    public function getChangesInAuditableModel(AuditableModel $auditableModel): array
     {
         $auditableModelChanges = $auditableModel->getDirty();
 

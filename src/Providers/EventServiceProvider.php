@@ -8,9 +8,12 @@ use Eloise\DataAudit\Listeners\LoggingAuditListener;
 
 class EventServiceProvider extends IlluminateEventServiceProvider
 {
+    /**
+    * @var array<string, array<int, string>>
+    */
     protected $listen = [
         AuditEvent::class => [
-            [LoggingAuditListener::class, 'onAudit'],
+            LoggingAuditListener::class,
         ],
     ];
 

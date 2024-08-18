@@ -16,6 +16,18 @@ interface AuditableModel
     public function versionAudit(): string;
     //public function authRequiredAudit(): bool;
 
-    //Methods comming from Model class
+    /**
+     * Methods comming from Model class
+     *
+     * @return array<string, mixed>
+     */
     public function getDirty();
+
+    /**
+     * Get the original value of an attribute.
+     *
+     * @param string $attribute
+     * @return mixed
+     */
+    public function getOriginal(string $attribute);
 }

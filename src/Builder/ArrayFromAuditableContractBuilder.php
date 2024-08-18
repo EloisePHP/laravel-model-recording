@@ -8,8 +8,8 @@ class ArrayFromAuditableContractBuilder
 {
     protected string $className;
     protected string $shortName;
-    protected string $default;
-    protected string $active;
+    protected bool $default;
+    protected bool $active;
     protected string $version;
     protected string $source;
 
@@ -27,6 +27,16 @@ class ArrayFromAuditableContractBuilder
         $this->source = $auditableModel->getSourceModelClass();
     }
 
+    /**
+     * @return array{
+     *     class_name: string,
+     *     short_name: string,
+     *     default: bool,
+     *     active: bool,
+     *     version: string,
+     *     source_class: string
+     * }
+     */
     public function toArray(): array
     {
         return [

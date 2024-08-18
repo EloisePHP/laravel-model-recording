@@ -15,7 +15,7 @@ class AuditQueries
     ): void {
         $query = Audit::query();
 
-        $baseCondition = function ($q) use ($modelId, $userId, $modelName) {
+        $baseCondition = function ($q) use ($modelId, $modelName) {
             if ($modelId !== null) {
                 $q->where('source_id', $modelId)->where('source_class', $modelName)
                   ->orWhere(function ($subQuery) use ($modelId, $modelName) {

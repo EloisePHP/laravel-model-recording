@@ -2,7 +2,6 @@
 
 namespace Eloise\DataAudit\Suppliers;
 
-use Eloise\DataAudit\Constants\Actions;
 use Eloise\DataAudit\Contracts\AuditableModel;
 use Eloise\DataAudit\Models\AuditableClass;
 use Eloise\DataAudit\Models\AuditAction;

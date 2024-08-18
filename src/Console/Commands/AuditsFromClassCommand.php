@@ -39,17 +39,22 @@ class AuditsFromClassCommand extends Command
     public function handle(
         AuditableModelsFromProject $auditableModelsFromProject
     ): void {
-        $modelName = $this->argument('modelName');
-        if ($modelName === null) {
+        if ($$this->argument('modelName') === null) {
             info('You must provide a model Name as an argument');
             info($this->signature);
             return;
         }
 
+        /** @var string $modelName */
+        $modelName = $this->argument('modelName');
+
         $auditableModels = $auditableModelsFromProject->getAuditableModels();
+
+        $modelClassName = '';
         $modelFound = false;
         foreach ($auditableModels as $auditableModel) {
             if ($auditableModel['short_name'] === $modelName) {
+                /** @var string $modelClassName */
                 $modelClassName = $auditableModel['class_name'];
                 $modelFound = true;
             }
@@ -61,8 +66,9 @@ class AuditsFromClassCommand extends Command
             info('Check eloise:audit:class command to see all auditable Models');
             return;
         }
-
+        /** @var int|null $modelId */
         $modelId = $this->option('modelId');
+        /** @var int|null $userId */
         $userId = $this->option('userId');
 
         $this->getAuditsFromParameter($modelClassName, $modelId, $userId);
