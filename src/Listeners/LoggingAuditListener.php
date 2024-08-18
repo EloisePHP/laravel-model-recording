@@ -11,8 +11,7 @@ class LoggingAuditListener
 {
     public function __construct(
         protected AuditModelManager $auditModelManager
-    )
-    {
+    ) {
     }
 
     public function onAudit(AuditEvent $event): void

@@ -15,7 +15,7 @@ class AuditableSupplier
         $auditClass = AuditableClass::where([
             'class_name' => $className
         ])->first();
-        
+
         if ($auditClass === null) {
             return null;
         }

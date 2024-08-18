@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AuditModelManager
 {
-
     public function createAudit(AuditableModel $auditableModel, string $action): Audit
     {
         $audit = new Audit();
@@ -50,5 +49,4 @@ class AuditModelManager
 
         return $changes;
     }
-
 }

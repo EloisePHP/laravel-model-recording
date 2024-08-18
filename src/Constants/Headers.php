@@ -12,7 +12,7 @@ class Headers
         'Version',
         'Source Class',
     ];
-    
+
     public const array AUDIT_HEADERS = [
         'id',
         'user_id',

@@ -3,7 +3,8 @@
 namespace Eloise\DataAudit\Contracts;
 
 /**
- * This a Contract for models only, every Model inside App\Models implementing this contract will be added to the audit_class table.
+ * This a Contract for models only, every Model inside App\Models
+ * implementing this contract will be added to the audit_class table.
  * If you are starting to use this Package you should use the Trait InitialDefaultActiveAuditTrait.
  */
 interface AuditableModel
@@ -17,5 +18,4 @@ interface AuditableModel
 
     //Methods comming from Model class
     public function getDirty();
-
 }

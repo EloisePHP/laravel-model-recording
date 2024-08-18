@@ -20,17 +20,16 @@ class AuditableModelsFromProjectTest extends TestCase
     public function test_get_auditable_models(): void
     {
         $auditableModelsFromProjectService = $this->app->make(AuditableModelsFromProject::class);
-        
+
         $auditableModels = $auditableModelsFromProjectService->getAuditableModels();
 
         $this->assertCount(2, $auditableModels);
 
-        $this->assertEquals(self::PREFIX_CLASS_NAME_TEST.self::DEFAULT_AUDITABLE_MODEL_TEST, $auditableModels[0]['class_name']);
+        $this->assertEquals(self::PREFIX_CLASS_NAME_TEST . self::DEFAULT_AUDITABLE_MODEL_TEST, $auditableModels[0]['class_name']);
         $this->assertEquals(self::DEFAULT_AUDITABLE_MODEL_TEST, $auditableModels[0]['short_name']);
         $this->assertTrue((bool) $auditableModels[0]['default']);
         $this->assertTrue((bool) $auditableModels[0]['active']);
         $this->assertEquals('v1_0', $auditableModels[0]['version']);
-        $this->assertEquals(self::PREFIX_CLASS_NAME_TEST.self::DEFAULT_AUDITABLE_MODEL_TEST, $auditableModels[0]['source_class']);
-
+        $this->assertEquals(self::PREFIX_CLASS_NAME_TEST . self::DEFAULT_AUDITABLE_MODEL_TEST, $auditableModels[0]['source_class']);
     }
 }

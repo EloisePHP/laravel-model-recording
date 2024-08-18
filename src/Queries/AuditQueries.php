@@ -5,16 +5,14 @@ namespace Eloise\DataAudit\Queries;
 use Eloise\DataAudit\Constants\Queries;
 use Eloise\DataAudit\Models\Audit;
 
-class AuditQueries 
+class AuditQueries
 {
-
     public function getAuditFromUserAndModelId(
         string $modelName,
         int $modelId = null,
         int $userId = null,
         callable $callback
-        ): void
-    {
+    ): void {
         $query = Audit::query();
 
         $baseCondition = function ($q) use ($modelId, $userId, $modelName) {
@@ -28,7 +26,7 @@ class AuditQueries
                   ->orWhere('target_class', $modelName);
             }
         };
-        
+
         // Adding user condition
         if ($userId !== null) {
             $query->where(function ($q) use ($baseCondition, $userId) {
@@ -41,7 +39,7 @@ class AuditQueries
         $query->orderBy('created_at', 'desc');
         $query->chunk(Queries::CHUNK_SIZE, function ($audits) use ($callback) {
             $shouldContinue = $callback($audits);
-            
+
             if ($shouldContinue === false) {
                 return false;
             }

@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Post extends Model implements AuditableModel
 {
-    use HasFactory, AuditableModelTrait;
+    use HasFactory;
+    use AuditableModelTrait;
 
     protected $table = 'test_eloise_post';
 

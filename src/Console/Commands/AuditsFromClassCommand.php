@@ -19,7 +19,7 @@ class AuditsFromClassCommand extends Command
 {
     public function __construct(
         protected AuditQueries $auditQueries,
-    ) {  
+    ) {
         parent::__construct();
     }
 
@@ -38,8 +38,7 @@ class AuditsFromClassCommand extends Command
      */
     public function handle(
         AuditableModelsFromProject $auditableModelsFromProject
-    ): void
-    {
+    ): void {
         $modelName = $this->argument('modelName');
         if ($modelName === null) {
             info('You must provide a model Name as an argument');
@@ -50,7 +49,7 @@ class AuditsFromClassCommand extends Command
         $auditableModels = $auditableModelsFromProject->getAuditableModels();
         $modelFound = false;
         foreach ($auditableModels as $auditableModel) {
-            if($auditableModel['short_name'] === $modelName) {
+            if ($auditableModel['short_name'] === $modelName) {
                 $modelClassName = $auditableModel['class_name'];
                 $modelFound = true;
             }
@@ -69,33 +68,37 @@ class AuditsFromClassCommand extends Command
         $this->getAuditsFromParameter($modelClassName, $modelId, $userId);
     }
 
-    public function getAuditsFromParameter(string $modelClassName, int|null $modelId, int|null $userId):void
+    public function getAuditsFromParameter(string $modelClassName, int|null $modelId, int|null $userId): void
     {
         $dataFound = false;
-        $this->auditQueries->getAuditFromUserAndModelId($modelClassName, $modelId, $userId, function ($audits) use (&$rows, &$dataFound) {
-            $rows = [];
-            foreach ($audits as $audit) {
-                $rows[] = $audit->toArrayForTable();
-            }
-            table(
-                headers: Headers::AUDIT_HEADERS,
-                rows: $rows
-            );
-            
-            //We check if we go inside once so we know we have found data beofre and we differentiate this case with the no data found
-            if (!$dataFound) {
-                $dataFound = true;
-            }
+        $this->auditQueries->getAuditFromUserAndModelId(
+            $modelClassName,
+            $modelId,
+            $userId,
+            function ($audits) use (&$rows, &$dataFound) {
+                $rows = [];
+                foreach ($audits as $audit) {
+                    $rows[] = $audit->toArrayForTable();
+                }
+                table(
+                    headers: Headers::AUDIT_HEADERS,
+                    rows: $rows
+                );
 
-            if(count($rows)<Queries::CHUNK_SIZE) {
-                return false;
+                if (!$dataFound) {
+                    $dataFound = true;
+                }
+
+                if (count($rows) < Queries::CHUNK_SIZE) {
+                    return false;
+                }
+
+                if (!confirm('Do you want to load more data?', true)) {
+                    return false;
+                }
+                return true;
             }
-            
-            if (!confirm('Do you want to load more data?', true)) {
-                return false;
-            }
-            return true;
-        });
+        );
 
         $message = $dataFound ? 'No more Audits found' : 'No data found with the given parameters.';
         info($message);

@@ -27,8 +27,7 @@ class AuditableClassCommand extends Command
      */
     public function handle(
         AuditableModelsFromProject $auditableModelsFromProject
-    ): void
-    {
+    ): void {
         info('Getting all Auditable Models.');
 
         $auditableModels = $auditableModelsFromProject->getAuditableModels();

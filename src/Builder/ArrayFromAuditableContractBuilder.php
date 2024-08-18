@@ -12,14 +12,13 @@ class ArrayFromAuditableContractBuilder
     protected string $active;
     protected string $version;
     protected string $source;
-   
+
     public function __construct(
         protected AuditableModel $auditableModel,
-    )
-    {
+    ) {
         $className = get_class($auditableModel);
         $parts = explode('\\', $className);
-        
+
         $this->className = get_class($auditableModel);
         $this->shortName = end($parts);
         $this->default = $auditableModel->defaultAudit();
