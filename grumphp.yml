@@ -12,6 +12,7 @@ grumphp:
             standard: PSR12
             ignore_patterns:
                 - '*/vendor/*'
+            triggered_by: [php]
 
         phpstan:
             configuration: phpstan.neon
