@@ -2,7 +2,10 @@
 
 namespace Eloise\DataAudit\Console\Commands;
 
+use Eloise\DataAudit\Builder\ArrayFromAuditableContractBuilder;
 use Eloise\DataAudit\Constants\Headers;
+use Eloise\DataAudit\Contracts\AuditableModel;
+use Eloise\DataAudit\Loaders\LoadActions;
 use Eloise\DataAudit\Services\AuditableModelsFromProject;
 use Eloise\DataAudit\Services\LoadAuditableClassFromArray;
 use Illuminate\Console\Command;
@@ -15,12 +18,12 @@ class AuditableClassCommand extends Command
     /**
      * @var string
      */
-    protected $signature = 'eloise:audit:class';
+    protected $signature = 'eloise:audit:refresh';
 
     /**
      * @var string
      */
-    protected $description = 'Get all auditable models';
+    protected $description = 'Instatiate all Auditable Classes and Actions to be auditable';
 
     /**
      * @throws \Exception
@@ -30,7 +33,7 @@ class AuditableClassCommand extends Command
     ): void {
         info('Getting all Auditable Models.');
 
-        $auditableModels = $auditableModelsFromProject->getAuditableModels();
+        $auditableModels = $auditableModelsFromProject->toArray();
         table(
             headers: Headers::AUDITABLE_CLASSES_HEADER,
             /** @phpstan-ignore-next-line */
@@ -39,6 +42,14 @@ class AuditableClassCommand extends Command
         foreach ($auditableModels as $auditableModel) {
             $load = new LoadAuditableClassFromArray();
             $load->loadAuditableClass($auditableModel);
+        }
+
+        $auditableModels = $auditableModelsFromProject->getAuditableModels();
+
+        /** @var AuditableModel $auditableModel */
+        foreach ($auditableModels as $auditableModel) {
+             $loader = new LoadActions($auditableModel);
+             $loader->load();
         }
 
         info('All these classes were added to the database.');

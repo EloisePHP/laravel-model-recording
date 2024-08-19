@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('name', 255);
             $table->string('source_class', 255);
             $table->string('target_class', 255)->nullable();
+            $table->string('method', 255)->nullable();
             $table->string('description', 255)->nullable();
             $table->string('version', 255);
             $table->timestamps();

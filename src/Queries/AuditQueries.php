@@ -36,7 +36,7 @@ class AuditQueries
             $query->where($baseCondition);
         }
 
-        $query->orderBy('created_at', 'desc');
+        $query->orderBy('created_at', 'desc')->orderBy('id', 'desc');
         $query->chunk(Queries::CHUNK_SIZE, function ($audits) use ($callback) {
             $shouldContinue = $callback($audits);
 

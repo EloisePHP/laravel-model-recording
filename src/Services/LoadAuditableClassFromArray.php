@@ -34,8 +34,6 @@ class LoadAuditableClassFromArray
             ['class_name' => $auditModel['class_name']],
             [
                 'name' => $auditModel['short_name'],
-                'default' => $auditModel['default'],
-                'active' => $auditModel['active'],
                 'version' => $auditModel['version'],
             ]
         );

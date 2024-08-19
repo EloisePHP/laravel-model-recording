@@ -9,16 +9,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 //class LoggingAuditListener implements ShouldQueue
 class LoggingAuditListener
 {
-    public function __construct(
-        protected AuditModelManager $auditModelManager
-    ) {
-    }
-
     public function handle(AuditEvent $event): void
     {
         $auditableModel = $event->getAuditableModel();
         $action = $event->getAuditAction();
 
-        $this->auditModelManager->createAudit($auditableModel, $action);
+        $auditManager = new AuditModelManager($auditableModel, $action);
+        $auditManager->createAudits();
     }
 }

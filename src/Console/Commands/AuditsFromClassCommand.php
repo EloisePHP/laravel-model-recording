@@ -11,8 +11,6 @@ use Illuminate\Console\Command;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
-use function Laravel\Prompts\multisearch;
-use function Laravel\Prompts\search;
 use function Laravel\Prompts\table;
 
 class AuditsFromClassCommand extends Command
@@ -39,7 +37,7 @@ class AuditsFromClassCommand extends Command
     public function handle(
         AuditableModelsFromProject $auditableModelsFromProject
     ): void {
-        if ($$this->argument('modelName') === null) {
+        if ($this->argument('modelName') === null) {
             info('You must provide a model Name as an argument');
             info($this->signature);
             return;
@@ -48,7 +46,7 @@ class AuditsFromClassCommand extends Command
         /** @var string $modelName */
         $modelName = $this->argument('modelName');
 
-        $auditableModels = $auditableModelsFromProject->getAuditableModels();
+        $auditableModels = $auditableModelsFromProject->toArray();
 
         $modelClassName = '';
         $modelFound = false;
