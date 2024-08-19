@@ -29,6 +29,7 @@ class AuditAction extends Model
         'eloise_audit_class_id',
         'source_class',
         'target_class',
+        'method',
         'description',
         'version',
         'serialized_data',

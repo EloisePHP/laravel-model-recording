@@ -1,6 +1,6 @@
 <?php
 
-namespace Eloise\DataAudit\Builder;
+namespace Eloise\DataAudit\Builders;
 
 use Eloise\DataAudit\Contracts\AuditableModel;
 
@@ -8,8 +8,6 @@ class ArrayFromAuditableContractBuilder
 {
     protected string $className;
     protected string $shortName;
-    protected bool $default;
-    protected bool $active;
     protected string $version;
     protected string $source;
 
@@ -21,8 +19,6 @@ class ArrayFromAuditableContractBuilder
 
         $this->className = get_class($auditableModel);
         $this->shortName = end($parts);
-        $this->default = $auditableModel->defaultAudit();
-        $this->active = $auditableModel->activeAudit();
         $this->version = $auditableModel->versionAudit();
         $this->source = $auditableModel->getSourceModelClass();
     }
@@ -31,8 +27,6 @@ class ArrayFromAuditableContractBuilder
      * @return array{
      *     class_name: string,
      *     short_name: string,
-     *     default: bool,
-     *     active: bool,
      *     version: string,
      *     source_class: string
      * }
@@ -42,8 +36,6 @@ class ArrayFromAuditableContractBuilder
         return [
             'class_name' => $this->className,
                 'short_name' => $this->shortName,
-                'default' => $this->default,
-                'active' => $this->active,
                 'version' => $this->version,
                 'source_class' => $this->source,
         ];

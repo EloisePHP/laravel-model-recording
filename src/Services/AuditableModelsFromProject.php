@@ -2,23 +2,25 @@
 
 namespace Eloise\DataAudit\Services;
 
-use Eloise\DataAudit\Builder\ArrayFromAuditableContractBuilder;
+use Eloise\DataAudit\Builders\ArrayFromAuditableContractBuilder;
 use Eloise\DataAudit\Contracts\AuditableModel as AuditableModelContract;
 use Eloise\DataAudit\Constants\PathNames;
 use Exception;
 use Illuminate\Support\Facades\File;
-use ReflectionClass;
 
 class AuditableModelsFromProject
 {
+    public function __construct(
+        protected AuditableModelContractChecker $checker
+    ) {
+    }
+
     /**
     * This method gets all models implementing the AuditableModel contract.
     *
     * @return array<int,array{
     *     class_name: string,
     *     short_name: string,
-    *     default: bool,
-    *     active: bool,
     *     version: string,
     *     source_class: string
     * }>
@@ -40,19 +42,29 @@ class AuditableModelsFromProject
                 throw new Exception($errorMessage);
             }
 
-            $reflectionClass = new ReflectionClass($className);
-
-            if (!$reflectionClass->implementsInterface(PathNames::AUDITABLE_CONTRACT)) {
+            if (!$this->checker->check($className)) {
                 continue;
             }
 
             /** @var AuditableModelContract $modelClass */
             $modelClass = new $className();
-
-            $builder = new ArrayFromAuditableContractBuilder($modelClass);
-            $auditableModels[] = $builder->toArray();
+            $auditableModels[] = $modelClass;
         }
 
         return $auditableModels;
+    }
+
+    public function toArray(): array
+    {
+        $auditableModels = $this->getAuditableModels();
+
+        $arrayOfAuditableModels = [];
+        /** @var AuditableModelContract $auditableModel */
+        foreach ($auditableModels as $auditableModel) {
+            $builder = new ArrayFromAuditableContractBuilder($auditableModel);
+            $arrayOfAuditableModels[] = $builder->toArray();
+        }
+
+        return $arrayOfAuditableModels;
     }
 }

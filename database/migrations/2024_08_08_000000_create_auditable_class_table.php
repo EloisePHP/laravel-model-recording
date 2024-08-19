@@ -17,8 +17,6 @@ return new class extends Migration
             $table->id();
             $table->string('name', 255);
             $table->string('class_name', 255);
-            $table->boolean('default');
-            $table->boolean('active');
             $table->string('version', 255);
             $table->timestamps();
         });
