@@ -2,8 +2,6 @@
 
 namespace Eloise\DataAudit\Constants;
 
-use Illuminate\Contracts\Config\Repository;
-
 class PathNames
 {
     public const string AUDITABLE_CONTRACT = 'Eloise\DataAudit\Contracts\AuditableModel';

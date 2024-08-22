@@ -2,6 +2,7 @@
 
 namespace Eloise\DataAudit\Models;
 
+use Eloise\DataAudit\Traits\Models\AuditRelationships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,6 +29,8 @@ use Illuminate\Support\Carbon;
  */
 class Audit extends Model
 {
+    use AuditRelationships;
+
     protected $table = 'eloise_audit';
 
     protected $fillable = [
@@ -52,22 +55,6 @@ class Audit extends Model
     ];
 
     /**
-     * @return BelongsTo<User, Audit>
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @return BelongsTo<AuditAction, Audit>
-     */
-    public function setAuditAction(): BelongsTo
-    {
-        return $this->belongsTo(AuditAction::class, 'eloise_audit_action_id');
-    }
-
-    /**
      * @return array<int, mixed>
      */
     public function toArrayForTable(): array
@@ -85,21 +72,5 @@ class Audit extends Model
             $this->created_at,
             $this->updated_at,
         ];
-    }
-
-    /**
-     * @return MorphTo<Model, Audit>
-     */
-    public function source(): MorphTo
-    {
-        return $this->morphTo(__FUNCTION__, 'source_class', 'source_id');
-    }
-
-    /**
-     * @return MorphTo<Model, Audit>
-     */
-    public function target(): MorphTo
-    {
-        return $this->morphTo(__FUNCTION__, 'target_class', 'target_id');
     }
 }
