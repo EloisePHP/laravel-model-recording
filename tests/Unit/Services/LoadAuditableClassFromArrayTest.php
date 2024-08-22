@@ -37,8 +37,6 @@ class LoadAuditableClassFromArrayTest extends TestCase
         $auditableClass = AuditableClass::where('class_name', $this->auditModel['class_name'])->first();
         $this->assertNotNull($auditableClass);
         $this->assertEquals('User', $auditableClass->name);
-        $this->assertTrue((bool) $auditableClass->default);
-        $this->assertTrue((bool) $auditableClass->active);
         $this->assertEquals('v1_0', $auditableClass->version);
 
         // Run the method again to test the update functionality

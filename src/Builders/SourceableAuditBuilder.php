@@ -55,7 +55,7 @@ class SourceableAuditBuilder
             'target_class' => $this->targetOptions['target_class'] ?? null,
             'target_id' => $this->targetOptions['target_id'] ?? null,
             'version' => $this->auditableModel->versionAudit(),
-            'changes' => json_encode($this->getChangesInAuditableModel()),
+            'changes' => $this->getChangesInAuditableModel(),
             'user_id' => optional(Auth::user())->id,
             'created_at' => now(),
             'updated_at' => now(),
