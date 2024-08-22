@@ -4,5 +4,5 @@ namespace Eloise\DataAudit\Constants;
 
 class Queries
 {
-    public const int CHUNK_SIZE = 500;
+    public const int CHUNK_SIZE = 200;
 }

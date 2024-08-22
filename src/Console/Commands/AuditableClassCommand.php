@@ -6,7 +6,7 @@ use Eloise\DataAudit\Constants\Headers;
 use Eloise\DataAudit\Contracts\AuditableModel;
 use Eloise\DataAudit\Loaders\LoadActions;
 use Eloise\DataAudit\Services\AuditableModelsFromProject;
-use Eloise\DataAudit\Services\LoadAuditableClassFromArray;
+use Eloise\DataAudit\Loaders\LoadAuditableClass;
 use Illuminate\Console\Command;
 
 use function Laravel\Prompts\info;
@@ -39,8 +39,8 @@ class AuditableClassCommand extends Command
             rows: $auditableModels
         );
         foreach ($auditableModels as $auditableModel) {
-            $load = new LoadAuditableClassFromArray();
-            $load->loadAuditableClass($auditableModel);
+            $load = new LoadAuditableClass();
+            $load->load($auditableModel);
         }
 
         $auditableModels = $auditableModelsFromProject->getAuditableModels();

@@ -3,12 +3,12 @@
 namespace Eloise\DataAudit\Managers;
 
 use Eloise\DataAudit\Builders\SourceableAuditBuilder;
-use Eloise\DataAudit\Constants\AuditableProperties;
 use Eloise\DataAudit\Contracts\AuditableModel;
 use Eloise\DataAudit\Models\Audit;
 use Eloise\DataAudit\Models\AuditAction;
-use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\DB;
 
 class AuditModelManager
@@ -44,11 +44,12 @@ class AuditModelManager
                     'target_id' => $value->id,
                 ];
                 $builder = new SourceableAuditBuilder($this->auditableModel, $this->action, $targetOptions);
-                $auditsToInsert[] = $builder->toArray();
+                $auditArray = $builder->toArray();
+                $auditArray['changes'] = json_encode($auditArray['changes']);
+                $auditsToInsert[] = $auditArray;
             }
         }
 
-        // Perform a bulk insert for all audits
         if (!empty($auditsToInsert)) {
             Audit::insert($auditsToInsert);
         }
@@ -62,7 +63,7 @@ class AuditModelManager
         Audit::create($auditArray);
     }
 
-    public function getResult(AuditableModel $auditableModel, string $relation, string $method)
+    public function getResult(AuditableModel $auditableModel, string $relation, string $method): array
     {
         /* These two verifications were done in the moment the audit actions were registered
         if (!method_exists($auditableModel, $method)) {
@@ -83,9 +84,9 @@ class AuditModelManager
         $result = $auditableModel->{$method}();
 
         // Determine whether the result is a single object or a collection
-        $data = $result instanceof \Illuminate\Database\Eloquent\Relations\BelongsTo ||
-                $result instanceof \Illuminate\Database\Eloquent\Relations\HasOne ||
-                $result instanceof \Illuminate\Database\Eloquent\Relations\MorphOne
+        $data = $result instanceof BelongsTo ||
+                $result instanceof HasOne ||
+                $result instanceof MorphOne
                 ? [$result->first()] // Returns a single object
                 : $result->get();  // Returns a collection of objects
 

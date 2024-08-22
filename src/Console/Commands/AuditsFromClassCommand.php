@@ -2,22 +2,22 @@
 
 namespace Eloise\DataAudit\Console\Commands;
 
-use Eloise\DataAudit\Constants\Headers;
-use Eloise\DataAudit\Constants\Queries;
-use Eloise\DataAudit\Queries\AuditQueries;
 use Eloise\DataAudit\Services\AuditableModelsFromProject;
-use Eloise\DataAudit\Services\LoadAuditableClassFromArray;
+use Eloise\DataAudit\Suppliers\AuditsCommandSupplier;
+use Eloise\DataAudit\Loaders\LoadAuditableClass;
+use Eloise\DataAudit\Queries\AuditQueries;
 use Illuminate\Console\Command;
 
-use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
-use function Laravel\Prompts\table;
 
 class AuditsFromClassCommand extends Command
 {
+    protected AuditsCommandSupplier $supplier;
+
     public function __construct(
-        protected AuditQueries $auditQueries,
+        protected AuditQueries $queries,
     ) {
+        $this->supplier = new AuditsCommandSupplier($queries);
         parent::__construct();
     }
 
@@ -56,8 +56,8 @@ class AuditsFromClassCommand extends Command
                 $modelClassName = $auditableModel['class_name'];
                 $modelFound = true;
             }
-            $load = new LoadAuditableClassFromArray();
-            $load->loadAuditableClass($auditableModel);
+            $load = new LoadAuditableClass();
+            $load->load($auditableModel);
         }
         if (!$modelFound) {
             info($modelName . ' has not been found in the Auditable Models');
@@ -69,40 +69,8 @@ class AuditsFromClassCommand extends Command
         /** @var int|null $userId */
         $userId = $this->option('userId');
 
-        $this->getAuditsFromParameter($modelClassName, $modelId, $userId);
-    }
-
-    public function getAuditsFromParameter(string $modelClassName, int|null $modelId, int|null $userId): void
-    {
         $dataFound = false;
-        $this->auditQueries->getAuditFromUserAndModelId(
-            $modelClassName,
-            $modelId,
-            $userId,
-            function ($audits) use (&$rows, &$dataFound) {
-                $rows = [];
-                foreach ($audits as $audit) {
-                    $rows[] = $audit->toArrayForTable();
-                }
-                table(
-                    headers: Headers::AUDIT_HEADERS,
-                    rows: $rows
-                );
-
-                if (!$dataFound) {
-                    $dataFound = true;
-                }
-
-                if (count($rows) < Queries::CHUNK_SIZE) {
-                    return false;
-                }
-
-                if (!confirm('Do you want to load more data?', true)) {
-                    return false;
-                }
-                return true;
-            }
-        );
+        $dataFound = $this->supplier->getAuditsFromParameter($modelClassName, $modelId, $userId);
 
         $message = $dataFound ? 'No more Audits found' : 'No data found with the given parameters.';
         info($message);

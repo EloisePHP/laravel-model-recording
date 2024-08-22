@@ -2,7 +2,6 @@
 
 namespace Eloise\DataAudit\Loaders;
 
-use Eloise\DataAudit\Builders\ArrayFromAuditableContractBuilder;
 use Eloise\DataAudit\Constants\Actions;
 use Eloise\DataAudit\Contracts\AuditableModel;
 use Eloise\DataAudit\Models\AuditableClass;
