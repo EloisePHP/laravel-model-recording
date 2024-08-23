@@ -28,13 +28,11 @@ class SourceableAuditBuilder
         /** @phpstan-ignore-next-line */
         $audit->source_id = $this->auditableModel->id;
 
-        $audit->target_class = get_class($this->targetOptions['target_class']);
-        $audit->target_id = $this->targetOptions['target_class'];
+        $audit->target_class = $this->targetOptions['target_class'] ?? null;
+        $audit->target_id = $this->targetOptions['target_id'] ?? null;
 
         $audit->version = $this->auditableModel->versionAudit();
-
-        $audit->changes = $this->getChangesInAuditableModel();
-
+        $audit->diff = $this->getChangesInAuditableModel();
         $currentUser = Auth::user();
 
         if ($currentUser instanceof User) {
@@ -55,7 +53,7 @@ class SourceableAuditBuilder
             'target_class' => $this->targetOptions['target_class'] ?? null,
             'target_id' => $this->targetOptions['target_id'] ?? null,
             'version' => $this->auditableModel->versionAudit(),
-            'changes' => $this->getChangesInAuditableModel(),
+            'diff' => $this->getChangesInAuditableModel(),
             'user_id' => optional(Auth::user())->id,
             'created_at' => now(),
             'updated_at' => now(),
@@ -65,7 +63,7 @@ class SourceableAuditBuilder
     }
 
     /**
-     * Get the changes in the auditable model.
+     * Get the diff in the auditable model.
      *
      * @return array<int, array<string, array<string, mixed>>>
      */
@@ -73,17 +71,16 @@ class SourceableAuditBuilder
     {
         $auditableModelChanges = $this->auditableModel->getDirty();
 
-        $changes = [];
+        $diff = [];
         foreach ($auditableModelChanges as $attribute => $newValue) {
             $originalValue = $this->auditableModel->getOriginal($attribute);
-            $changes[] = [
-                $attribute => [
-                    AuditableProperties::ORIGINAL_VALUE => $originalValue,
-                    AuditableProperties::NEW_VALUE => $newValue,
-                ],
+            $diff[] = [
+                AuditableProperties::FIELD => $attribute,
+                AuditableProperties::ORIGINAL_VALUE => $originalValue,
+                AuditableProperties::NEW_VALUE => $newValue,
             ];
         }
 
-        return $changes;
+        return $diff;
     }
 }

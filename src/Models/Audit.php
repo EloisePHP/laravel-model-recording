@@ -2,6 +2,7 @@
 
 namespace Eloise\DataAudit\Models;
 
+use Eloise\DataAudit\Constants\AuditableProperties;
 use Eloise\DataAudit\Traits\Models\AuditRelationships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +22,7 @@ use Illuminate\Support\Carbon;
  * @property int $target_id
  * @property string $message
  * @property string $version
- * @property array $changes
+ * @property array $diff
  * @property array $serialized_data
  * @property string $link
  * @property Carbon|null $created_at
@@ -44,13 +45,13 @@ class Audit extends Model
         'target_class_identifier',
         'message',
         'version',
-        'changes',
+        'diff',
         'link',
         'serialized_data',
     ];
 
     protected $casts = [
-        'changes' => 'array',
+        'diff' => 'array',
         'serialized_data' => 'array',
     ];
 
@@ -67,10 +68,23 @@ class Audit extends Model
             $this->source_id,
             $this->target_class,
             $this->target_id,
-            $this->message,
+            $this->attributesChanged(),
             $this->version,
             $this->created_at,
             $this->updated_at,
         ];
+    }
+
+    public function attributesChanged(): string
+    {
+        $added = 0;
+        foreach ($this->diff as $diff) {
+            if ($diff[AuditableProperties::ORIGINAL_VALUE] === null) {
+                $added += 1;
+            }
+        }
+        $messageAdded = 'fields added';
+        $messageChanged = 'fields changed';
+        return sprintf("%s %s\n%s %s", count($this->diff) - $added, $messageChanged, $added, $messageAdded);
     }
 }

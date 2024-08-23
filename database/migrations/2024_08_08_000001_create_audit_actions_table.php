@@ -12,31 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         $this->createAuditActionTable();
-
-        $this->addForeignKeysToAuditAction();
     }
 
     public function createAuditActionTable(): void
     {
         Schema::create('eloise_audit_action', function (Blueprint $table) {
             $table->id();
-            $table->integer('eloise_audit_class_id');
-            $table->string('name', 255);
-            $table->string('source_class', 255);
-            $table->string('target_class', 255)->nullable();
-            $table->string('method', 255)->nullable();
-            $table->string('description', 255)->nullable();
-            $table->string('version', 255);
+            $table->foreignId('eloise_audit_class_id')->constrained('eloise_auditable_class')
+                    ->onUpdate('cascade')->onDelete('cascade');
+            $table->string('name');
+            $table->string('source_class');
+            $table->string('target_class')->nullable();
+            $table->string('method')->nullable();
+            $table->string('description')->nullable();
+            $table->string('version');
             $table->timestamps();
-        });
-    }
-
-    public function addForeignKeysToAuditAction(): void
-    {
-        Schema::table('eloise_audit_action', static function (Blueprint $table): void {
-
-            $table->foreign('eloise_audit_class_id')
-                        ->references('id')->on('eloise_auditable_class')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
