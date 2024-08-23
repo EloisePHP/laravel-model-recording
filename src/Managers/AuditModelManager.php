@@ -27,6 +27,13 @@ class AuditModelManager
         });
     }
 
+    public function createDefaultAudit(): void
+    {
+        $builder = new SourceableAuditBuilder($this->auditableModel, $this->action);
+        $audit = $builder->toAudit();
+        $audit->save();
+    }
+
     public function createRelatedAudits(): void
     {
         $relatedActions = AuditAction::select('name', 'source_class', 'target_class', 'method')
@@ -44,26 +51,19 @@ class AuditModelManager
                     'target_id' => $value->id,
                 ];
                 $builder = new SourceableAuditBuilder($this->auditableModel, $this->action, $targetOptions);
-                $auditArray = $builder->toArray();
-                $auditArray['changes'] = json_encode($auditArray['changes']);
-                $auditsToInsert[] = $auditArray;
+                $auditsToInsert[] = $builder->toAudit();
             }
         }
 
         if (!empty($auditsToInsert)) {
-            Audit::insert($auditsToInsert);
+            foreach ($auditsToInsert as $audit) {
+                $audit->save();
+            }
+            //Audit::insert($auditsToInsert);
         }
     }
 
-    public function createDefaultAudit(): void
-    {
-        $builder = new SourceableAuditBuilder($this->auditableModel, $this->action);
-        $auditArray = $builder->toArray();
-
-        Audit::create($auditArray);
-    }
-
-    public function getResult(AuditableModel $auditableModel, string $relation, string $method): array
+    public function getResult(AuditableModel $auditableModel, string $relation, string $method)
     {
         /* These two verifications were done in the moment the audit actions were registered
         if (!method_exists($auditableModel, $method)) {

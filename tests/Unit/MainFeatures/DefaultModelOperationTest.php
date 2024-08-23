@@ -94,9 +94,9 @@ class DefaultModelOperationTest extends TestCase
             $this->assertNotEmpty($auditUpdated);
             $this->assertEquals($model->getSourceModelClass(), $auditUpdated->source_class);
 
-            // Checking the changes property everything has been saved correctly
-            $createdChanges = $this->getSpecificAttribute($auditCreated->changes, 'test_name');
-            $updatedChanges = $this->getSpecificAttribute($auditUpdated->changes, 'test_name');
+            // Checking the diff property everything has been saved correctly
+            $createdChanges = $this->getSpecificAttribute($auditCreated->diff, 'test_name');
+            $updatedChanges = $this->getSpecificAttribute($auditUpdated->diff, 'test_name');
 
             $this->assertEquals($createdChanges[AuditableProperties::NEW_VALUE], $updatedChanges[AuditableProperties::ORIGINAL_VALUE]);
             $this->assertEquals($createdChanges[AuditableProperties::NEW_VALUE] . ' updated', $updatedChanges[AuditableProperties::NEW_VALUE]);
@@ -144,15 +144,14 @@ class DefaultModelOperationTest extends TestCase
         return $randomNames;
     }
 
-    public function getSpecificAttribute(array $changes, string $attribute): array
+    public function getSpecificAttribute(array $diff, string $attribute): array|null
     {
-        $createdValue = [];
-        foreach ($changes as $value) {
-            if (isset($value[$attribute])) {
-                $createdValue = $value[$attribute];
+        foreach ($diff as $value) {
+            if ($value[AuditableProperties::FIELD]==$attribute) {
+                return $value;
             }
         }
 
-        return $createdValue;
+        return null;
     }
 }
