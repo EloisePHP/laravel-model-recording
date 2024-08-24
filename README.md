@@ -27,7 +27,6 @@ This package allows you to audit every action done with a Model you chose.
 Once installed for every Model in you project you want to Audit you should make it implement the contract AuditableModel and use the trait AuditableModelTrait like this:
 
 ```php
-// Adding permissions to a user
 class DefaultAuditableModel extends Model implements AuditableModel
 {
     use AuditableModelTrait;
@@ -35,9 +34,20 @@ class DefaultAuditableModel extends Model implements AuditableModel
 
 And that's it! Everytime someone creates, edits or deletes this model it will be audited and you can check it in the eloise_audit table.
 
+## Advanced Features
+
+It has the feature of Rollback any auditable Model to the time of your choice
+
+```php
+$manager = new RollbackManager($currentPost, $specificTime);
+$retrievedPost = $manager->retrieve();
+```
+
+In this way, any $retrievedPost will be on the same class of $currentPost but at the time $specificTime.
+
 ## Support me
 
-I'm looking for a job right now so if you show this package to anyone out there it would help me a ton.
+If you show this package to anyone out there it would help me a ton.
 
 ### Testing
 All tests are made with [Orchestra Testbench](https://packages.tools/testbench).
