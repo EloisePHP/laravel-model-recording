@@ -23,7 +23,7 @@ class AuditModelManager
     {
         DB::transaction(function () {
             $this->createDefaultAudit();
-            $this->createRelatedAudits();
+            //$this->createRelatedAudits();
         });
     }
 
