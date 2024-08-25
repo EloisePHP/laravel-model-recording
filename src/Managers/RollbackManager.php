@@ -44,18 +44,17 @@ class RollbackManager
             return null;
         }
 
-        if ($audits->count() === 1) {
-            return $audits->first()->diff;
-        }
-
         $rollback = [];
 
         foreach ($audits as $diffs) {
             foreach ($diffs as $diff) {
                 $rollback[$diff[AuditableProperties::FIELD]]
-                    = ($diff[AuditableProperties::ORIGINAL_VALUE] === null)
-                    ? $diff[AuditableProperties::NEW_VALUE]
-                    : $diff[AuditableProperties::ORIGINAL_VALUE];
+                    = $diff[AuditableProperties::ORIGINAL_VALUE]
+                    ?? $diff[AuditableProperties::NEW_VALUE];
+            }
+
+            if ($audits->count() === 1) {
+                return $rollback;
             }
         }
 
