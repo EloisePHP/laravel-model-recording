@@ -2,7 +2,6 @@
 
 namespace Eloise\DataAudit\Managers;
 
-use Eloise\DataAudit\Constants\Actions;
 use Eloise\DataAudit\Constants\AuditableProperties;
 use Eloise\DataAudit\Contracts\AuditableModel;
 use Eloise\DataAudit\Queries\RollbackQuery;
@@ -35,6 +34,9 @@ class RollbackManager
         return $newModel;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function retrieveDiff(): array | null
     {
         $query = new RollbackQuery();
@@ -44,6 +46,7 @@ class RollbackManager
             return null;
         }
 
+        /** @var array<string, mixed> $rollback */
         $rollback = [];
 
         foreach ($audits as $diffs) {
