@@ -9,6 +9,7 @@ abstract class TestCase extends OrchestraTestCase
 {
     public const string MODELS_FOLDER_TEST = '/../../../../../tests/Fixtures/Models';
     public const string PREFIX_CLASS_NAME_TEST = 'Eloise\\DataAudit\\Tests\\Fixtures\\Models\\';
+    public const int AMOUNT_OF_AUDITABLE_MODELS = 3;
 
     protected function getPackageProviders($app)
     {

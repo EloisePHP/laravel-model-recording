@@ -7,10 +7,6 @@ use Illuminate\Support\ServiceProvider;
 
 class ConfigServiceProvider extends ServiceProvider
 {
-    public function register()
-    {
-    }
-
     public function boot(): void
     {
         $this->publishes([

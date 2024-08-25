@@ -23,7 +23,7 @@ class AuditableModelsFromProjectTest extends TestCase
 
         $auditableModels = $auditableModelsFromProjectService->toArray();
 
-        $this->assertCount(2, $auditableModels);
+        $this->assertCount(self::AMOUNT_OF_AUDITABLE_MODELS, $auditableModels);
 
         $this->assertEquals(self::PREFIX_CLASS_NAME_TEST . self::DEFAULT_AUDITABLE_MODEL_TEST, $auditableModels[0]['class_name']);
         $this->assertEquals(self::DEFAULT_AUDITABLE_MODEL_TEST, $auditableModels[0]['short_name']);
