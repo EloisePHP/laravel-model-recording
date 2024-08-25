@@ -9,7 +9,7 @@ class Actions
         self::ACTION_UPDATED,
         self::ACTION_DELETED,
     ];
-    public const string ACTION_CREATED = 'created';
-    public const string ACTION_UPDATED = 'updated';
-    public const string ACTION_DELETED = 'deleted';
+    public const string ACTION_CREATED = 'eloise_created';
+    public const string ACTION_UPDATED = 'eloise_updated';
+    public const string ACTION_DELETED = 'eloise_deleted';
 }
