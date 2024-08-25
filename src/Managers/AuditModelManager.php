@@ -4,7 +4,6 @@ namespace Eloise\DataAudit\Managers;
 
 use Eloise\DataAudit\Builders\SourceableAuditBuilder;
 use Eloise\DataAudit\Contracts\AuditableModel;
-use Eloise\DataAudit\Models\Audit;
 use Eloise\DataAudit\Models\AuditAction;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -15,7 +14,8 @@ class AuditModelManager
 {
     public function __construct(
         protected AuditableModel $auditableModel,
-        protected string $action
+        protected string $action,
+        protected string | null $message = null,
     ) {
     }
 
@@ -29,7 +29,7 @@ class AuditModelManager
 
     public function createDefaultAudit(): void
     {
-        $builder = new SourceableAuditBuilder($this->auditableModel, $this->action);
+        $builder = new SourceableAuditBuilder($this->auditableModel, $this->action, message: $this->message);
         $audit = $builder->toAudit();
         $audit->save();
     }

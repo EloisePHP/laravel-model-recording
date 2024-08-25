@@ -13,7 +13,7 @@ class Headers
         'Source Class',
     ];
 
-    public const array AUDIT_HEADERS = [
+    public const array AUDIT_HEADERS_FOR_COMMAND = [
         'id',
         'user_id',
         'action',
@@ -21,7 +21,7 @@ class Headers
         'source_id',
         'target_class',
         'target_id',
-        'message',
+        'fields changed',
         'version',
         'created_at',
         'updated_at',

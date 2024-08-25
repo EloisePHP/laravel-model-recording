@@ -83,8 +83,12 @@ class Audit extends Model
                 $added += 1;
             }
         }
-        $messageAdded = 'fields added';
-        $messageChanged = 'fields changed';
-        return sprintf("%s %s\n%s %s", count($this->diff) - $added, $messageChanged, $added, $messageAdded);
+        $updated = count($this->diff) - $added;
+
+        $messageAdded = ($added > 0) ? sprintf("%s %s", $added, ' added') : '';
+        $messageAdded = (!empty($messageAdded) && $updated > 0) ? sprintf("%s%s", $messageAdded, "\n") : $messageAdded;
+        $messageUpdated = ($updated > 0 ) ? sprintf("%s%s %s", $messageAdded, $updated, ' updated') : $messageAdded;
+
+        return !empty($messageUpdated) ? $messageUpdated : 'No changes';
     }
 }

@@ -3,7 +3,7 @@
 namespace Eloise\DataAudit\Providers;
 
 use Eloise\DataAudit\Contracts\AuditableModel;
-use Eloise\DataAudit\Managers\RollbackManager;
+use Eloise\DataAudit\Managers\RollbackManager as RewindManager;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 
@@ -30,7 +30,7 @@ class RollbackManagerServiceProvider extends ServiceProvider
 
                 public function retrieve()
                 {
-                    return (new RollbackManager($this->auditableModel, $this->dateTime))->retrieve();
+                    return (new RewindManager($this->auditableModel, $this->dateTime))->retrieve();
                 }
             };
         });

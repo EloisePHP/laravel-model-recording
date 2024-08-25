@@ -4,13 +4,13 @@ namespace Eloise\DataAudit\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Rollback extends Facade
+class Record extends Facade
 {
     /**
-     * @return string
+     * * @return string
      */
     protected static function getFacadeAccessor()
     {
-        return 'rollback.manager.factory';
+        return 'record.manager.factory';
     }
 }

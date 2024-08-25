@@ -28,7 +28,7 @@ class AuditsCommandSupplier
                     $rows[] = $audit->toArrayForTable();
                 }
                 table(
-                    headers: Headers::AUDIT_HEADERS,
+                    headers: Headers::AUDIT_HEADERS_FOR_COMMAND,
                     rows: $rows
                 );
 

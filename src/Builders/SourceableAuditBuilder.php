@@ -14,6 +14,7 @@ class SourceableAuditBuilder
         protected AuditableModel $auditableModel,
         protected string $action,
         protected array $targetOptions = [],
+        protected string | null $message = null,
     ) {
     }
 
@@ -33,6 +34,7 @@ class SourceableAuditBuilder
 
         $audit->version = $this->auditableModel->versionAudit();
         $audit->diff = $this->getChangesInAuditableModel();
+        $audit->message = $this->message;
         $currentUser = Auth::user();
 
         if ($currentUser instanceof User) {
