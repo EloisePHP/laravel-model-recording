@@ -36,14 +36,19 @@ And that's it! Everytime someone creates, edits or deletes this model it will be
 
 ## Advanced Features
 
-It has the feature of Rollback any auditable Model to the time of your choice
+It has the feature of Rollback any auditable Model to the time of your choice, for example
 
 ```php
-$manager = new RollbackManager($currentPost, $specificTime);
-$retrievedPost = $manager->retrieve();
+$retrievesPost = Rollback::forModel($post)
+                         ->atDate(Carbon::now()->subDay())
+                         ->retrieve();
 ```
+Or if you just want to see the first Post created
 
-In this way, any $retrievedPost will be on the same class of $currentPost but at the time $specificTime.
+```php
+$retrievesPost = Rollback::forModel($post)
+                         ->retrieve();
+```
 
 ## Support me
 
