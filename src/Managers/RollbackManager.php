@@ -1,23 +1,23 @@
 <?php
 
-namespace Eloise\DataAudit\Managers;
+namespace Eloise\RecordModel\Managers;
 
-use Eloise\DataAudit\Constants\AuditableProperties;
-use Eloise\DataAudit\Contracts\AuditableModel;
-use Eloise\DataAudit\Queries\RollbackQuery;
+use Eloise\RecordModel\Constants\RecordableProperties;
+use Eloise\RecordModel\Contracts\RecordableModel;
+use Eloise\RecordModel\Queries\RollbackQuery;
 use Illuminate\Support\Carbon;
 
 class RollbackManager
 {
     public function __construct(
-        protected AuditableModel $auditableModel,
+        protected RecordableModel $recordableModel,
         protected Carbon|null $dateTime,
     ) {
     }
 
-    public function retrieve(): AuditableModel
+    public function retrieve(): RecordableModel
     {
-        $newModel = $this->auditableModel->replicate();
+        $newModel = $this->recordableModel->replicate();
 
         $oldModel = $this->retrieveDiff();
         if ($oldModel === null) {
@@ -25,7 +25,7 @@ class RollbackManager
         }
 
         foreach ($oldModel as $key => $value) {
-            if ($key == $this->auditableModel->getKeyName()) {
+            if ($key == $this->recordableModel->getKeyName()) {
                 continue;
             }
             $newModel->setAttribute($key, $value);
@@ -40,23 +40,23 @@ class RollbackManager
     public function retrieveDiff(): array | null
     {
         $query = new RollbackQuery();
-        $audits = $query->getCollectionOfDiffs($this->auditableModel, $this->dateTime);
+        $records = $query->getCollectionOfDiffs($this->recordableModel, $this->dateTime);
 
-        if ($audits->isEmpty()) {
+        if ($records->isEmpty()) {
             return null;
         }
 
         /** @var array<string, mixed> $rollback */
         $rollback = [];
 
-        foreach ($audits as $diffs) {
+        foreach ($records as $diffs) {
             foreach ($diffs as $diff) {
-                $rollback[$diff[AuditableProperties::FIELD]]
-                    = $diff[AuditableProperties::ORIGINAL_VALUE]
-                    ?? $diff[AuditableProperties::NEW_VALUE];
+                $rollback[$diff[RecordableProperties::FIELD]]
+                    = $diff[RecordableProperties::ORIGINAL_VALUE]
+                    ?? $diff[RecordableProperties::NEW_VALUE];
             }
 
-            if ($audits->count() === 1) {
+            if ($records->count() === 1) {
                 return $rollback;
             }
         }

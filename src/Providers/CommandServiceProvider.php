@@ -1,9 +1,9 @@
 <?php
 
-namespace Eloise\DataAudit\Providers;
+namespace Eloise\RecordModel\Providers;
 
-use Eloise\DataAudit\Console\Commands\AuditableClassCommand;
-use Eloise\DataAudit\Console\Commands\AuditsFromClassCommand;
+use Eloise\RecordModel\Console\Commands\RecordableClassCommand;
+use Eloise\RecordModel\Console\Commands\RecordsFromClassCommand;
 use Illuminate\Support\ServiceProvider;
 
 class CommandServiceProvider extends ServiceProvider
@@ -12,8 +12,8 @@ class CommandServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                AuditsFromClassCommand::class,
-                AuditableClassCommand::class,
+                RecordsFromClassCommand::class,
+                RecordableClassCommand::class,
             ]);
         }
     }

@@ -1,23 +1,30 @@
 <?php
 
-namespace Eloise\DataAudit\Contracts;
+namespace Eloise\RecordModel\Contracts;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Eloise\RecordModel\Models\Record;
 
 /**
- * This a Contract for models only, every Model inside App\Models
- * implementing this contract will be added to the audit_class table.
- * If you are starting to use this Package you should use the Trait AuditableModelTrait.
+ * This is a Contract for models only, every Model inside App\Models
+ * implementing this contract will be added to the record_class table.
+ * If you are starting to use this Package you should use the Trait RecordableModelTrait.
  */
-interface AuditableModel
+interface RecordableModel
 {
     public function getSourceModelClass(): string;
 
-    public function versionAudit(): string;
+    public function versionRecord(): string;
 
-    public function auditsAsSource(): MorphMany;
+    /**
+     * @return MorphMany<Record>
+     */
+    public function recordsAsSource(): MorphMany;
 
-    public function auditsAsTarget(): MorphMany;
+    /**
+     * @return MorphMany<Record>
+     */
+    public function recordsAsTarget(): MorphMany;
 
     // Methods from Model Class
 
@@ -40,7 +47,7 @@ interface AuditableModel
     /**
      * Clone the model into a new, non-existing instance.
      *
-     * @param  array|null  $except
+     * @param  array<int, string>|null  $except
      * @return static
      */
     public function replicate(?array $except = null);
@@ -59,7 +66,7 @@ interface AuditableModel
     /**
      * Save the model to the database.
      *
-     * @param  array  $options
+     * @param  array<string, mixed>  $options
      * @return bool
      */
     public function save(array $options = []);

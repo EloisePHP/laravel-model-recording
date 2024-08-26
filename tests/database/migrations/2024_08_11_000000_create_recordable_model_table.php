@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        $this->createAuditableClassTestTable();
+        $this->createRecordableClassTestTable();
     }
 
-    public function createAuditableClassTestTable(): void
+    public function createRecordableClassTestTable(): void
     {
-        Schema::create('test_eloise_auditable_model', function (Blueprint $table) {
+        Schema::create('test_eloise_recordable_model', function (Blueprint $table) {
             $table->id();
             $table->string('test_name', 255);
             $table->timestamps();
@@ -21,6 +21,6 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('test_eloise_auditable_model');
+        Schema::dropIfExists('test_eloise_recordable_model');
     }
 };

@@ -1,8 +1,7 @@
 <?php
 
-namespace Eloise\DataAudit\Providers;
+namespace Eloise\RecordModel\Providers;
 
-use Eloise\DataAudit\Console\Commands\AuditableClassRefreshCommand;
 use Illuminate\Support\ServiceProvider;
 
 class ConfigServiceProvider extends ServiceProvider

@@ -1,6 +1,6 @@
 <?php
 
-namespace Eloise\DataAudit\Tests\Fixtures\Models;
+namespace Eloise\RecordModel\Tests\Fixtures\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;

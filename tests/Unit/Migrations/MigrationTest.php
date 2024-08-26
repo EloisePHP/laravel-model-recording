@@ -1,8 +1,8 @@
 <?php
 
-namespace Eloise\DataAudit\Tests\Unit\Migrations;
+namespace Eloise\RecordModel\Tests\Unit\Migrations;
 
-use Eloise\DataAudit\Tests\TestCase;
+use Eloise\RecordModel\Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
 
 class MigrationTest extends TestCase
@@ -10,10 +10,10 @@ class MigrationTest extends TestCase
     public function test_database_tables()
     {
         $expectedTables = [
-            'eloise_audit',
-            'eloise_audit_action',
-            'eloise_auditable_class',
-            'test_eloise_auditable_model',
+            'eloise_record',
+            'eloise_record_action',
+            'eloise_recorded_model',
+            'test_eloise_recordable_model',
             'test_eloise_comment',
             'test_eloise_post',
             'users',

@@ -1,17 +1,17 @@
 <?php
 
-namespace Eloise\DataAudit\Services;
+namespace Eloise\RecordModel\Services;
 
-use Eloise\DataAudit\Constants\PathNames;
+use Eloise\RecordModel\Constants\PathNames;
 use ReflectionClass;
 
-class AuditableModelContractChecker
+class RecordableModelContractChecker
 {
     public function check(string $className): ReflectionClass|false
     {
         $reflectionClass = new ReflectionClass($className);
 
-        if (!$reflectionClass->implementsInterface(PathNames::AUDITABLE_CONTRACT)) {
+        if (!$reflectionClass->implementsInterface(PathNames::RECORDABLE_CONTRACT)) {
             return false;
         }
 

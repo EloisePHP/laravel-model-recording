@@ -1,10 +1,10 @@
 <?php
 
-namespace Eloise\DataAudit\Constants;
+namespace Eloise\RecordModel\Constants;
 
 class Headers
 {
-    public const array AUDITABLE_CLASSES_HEADER = [
+    public const array RECORDABLE_CLASSES_HEADER = [
         'Class name',
         'Short classname',
         'Default',
@@ -13,7 +13,7 @@ class Headers
         'Source Class',
     ];
 
-    public const array AUDIT_HEADERS_FOR_COMMAND = [
+    public const array RECORD_HEADERS_FOR_COMMAND = [
         'id',
         'user_id',
         'action',
@@ -27,7 +27,7 @@ class Headers
         'updated_at',
     ];
 
-    public const array AUDIT_RELATIONS_HEADER = [
+    public const array RECORD_RELATIONS_HEADER = [
         'source_class',
         'target_class',
         'type'

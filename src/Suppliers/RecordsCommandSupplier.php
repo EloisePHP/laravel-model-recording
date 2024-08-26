@@ -1,34 +1,34 @@
 <?php
 
-namespace Eloise\DataAudit\Suppliers;
+namespace Eloise\RecordModel\Suppliers;
 
-use Eloise\DataAudit\Constants\Headers;
-use Eloise\DataAudit\Constants\Queries;
-use Eloise\DataAudit\Queries\AuditQueries;
+use Eloise\RecordModel\Constants\Headers;
+use Eloise\RecordModel\Constants\Queries;
+use Eloise\RecordModel\Queries\RecordQueries;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\table;
 
-class AuditsCommandSupplier
+class RecordsCommandSupplier
 {
     public function __construct(
-        protected AuditQueries $auditQueries,
+        protected RecordQueries $recordQueries,
     ) {
     }
-    public function getAuditsFromParameter(string $modelClassName, int|null $modelId, int|null $userId): bool|null
+    public function getRecordsFromParameter(string $modelClassName, int|null $modelId, int|null $userId): bool|null
     {
         $dataFound = false;
-        $this->auditQueries->getAuditFromUserAndModelId(
+        $this->recordQueries->getRecordFromUserAndModelId(
             $modelClassName,
             $modelId,
             $userId,
-            function ($audits) use (&$rows, &$dataFound) {
+            function ($records) use (&$rows, &$dataFound) {
                 $rows = [];
-                foreach ($audits as $audit) {
-                    $rows[] = $audit->toArrayForTable();
+                foreach ($records as $record) {
+                    $rows[] = $record->toArrayForTable();
                 }
                 table(
-                    headers: Headers::AUDIT_HEADERS_FOR_COMMAND,
+                    headers: Headers::RECORD_HEADERS_FOR_COMMAND,
                     rows: $rows
                 );
 

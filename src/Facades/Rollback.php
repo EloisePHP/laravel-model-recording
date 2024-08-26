@@ -1,6 +1,6 @@
 <?php
 
-namespace Eloise\DataAudit\Facades;
+namespace Eloise\RecordModel\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

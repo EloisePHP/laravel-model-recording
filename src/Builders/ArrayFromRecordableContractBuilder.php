@@ -1,10 +1,10 @@
 <?php
 
-namespace Eloise\DataAudit\Builders;
+namespace Eloise\RecordModel\Builders;
 
-use Eloise\DataAudit\Contracts\AuditableModel;
+use Eloise\RecordModel\Contracts\RecordableModel;
 
-class ArrayFromAuditableContractBuilder
+class ArrayFromRecordableContractBuilder
 {
     protected string $className;
     protected string $shortName;
@@ -12,15 +12,15 @@ class ArrayFromAuditableContractBuilder
     protected string $source;
 
     public function __construct(
-        protected AuditableModel $auditableModel,
+        protected RecordableModel $recordableModel,
     ) {
-        $className = get_class($auditableModel);
+        $className = get_class($recordableModel);
         $parts = explode('\\', $className);
 
-        $this->className = get_class($auditableModel);
+        $this->className = get_class($recordableModel);
         $this->shortName = end($parts);
-        $this->version = $auditableModel->versionAudit();
-        $this->source = $auditableModel->getSourceModelClass();
+        $this->version = $recordableModel->versionRecord();
+        $this->source = $recordableModel->getSourceModelClass();
     }
 
     /**
