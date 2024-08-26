@@ -1,10 +1,10 @@
 <?php
 
-namespace Eloise\DataAudit\Constants;
+namespace Eloise\RecordModel\Constants;
 
 class PathNames
 {
-    public const string AUDITABLE_CONTRACT = 'Eloise\DataAudit\Contracts\AuditableModel';
+    public const string RECORDABLE_CONTRACT = 'Eloise\RecordModel\Contracts\RecordableModel';
 
     public function getProjectModelsPath(): string
     {

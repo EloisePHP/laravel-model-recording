@@ -1,6 +1,6 @@
 <?php
 
-namespace Eloise\DataAudit\Models;
+namespace Eloise\RecordModel\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -15,9 +15,9 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-class AuditableClass extends Model
+class RecordedModel extends Model
 {
-    protected $table = 'eloise_auditable_class';
+    protected $table = 'eloise_recorded_model';
 
     protected $fillable = [
         'name',

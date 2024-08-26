@@ -1,6 +1,6 @@
 {
-    "name": "eloise/laravel-data-audit",
-    "description": "This laravel package help us to register every model activities",
+    "name": "eloise/laravel-record-model",
+    "description": "This laravel package help us to record every model activity.",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -21,8 +21,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Eloise\\DataAudit\\": "src/",
-            "Eloise\\DataAudit\\Tests\\": "tests/"
+            "Eloise\\RecordModel\\": "src/",
+            "Eloise\\RecordModel\\Tests\\": "tests/"
         }
     },
     "autoload-dev": {
@@ -35,10 +35,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Eloise\\DataAudit\\DataAuditServiceProvider"
+                "Eloise\\RecordModel\\RecordModelServiceProvider"
             ],
             "aliases": {
-                "Debugbar": "Eloise\\DataAudit\\Facade"
+                "Debugbar": "Eloise\\RecordModel\\Facade"
             }
         }
     },

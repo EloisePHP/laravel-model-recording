@@ -1,17 +1,16 @@
 <?php
 
-namespace Eloise\DataAudit\Models;
+namespace Eloise\RecordModel\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * Class AuditAction
+ * Class RecordAction
  *
  * @property int $id
- * @property int $eloise_audit_class_id
+ * @property int $eloise_record_class_id
  * @property string $name
  * @property string $source_class
  * @property string|null $description
@@ -20,13 +19,13 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-class AuditAction extends Model
+class RecordAction extends Model
 {
-    protected $table = 'eloise_audit_action';
+    protected $table = 'eloise_record_action';
 
     protected $fillable = [
         'name',
-        'eloise_audit_class_id',
+        'eloise_record_class_id',
         'source_class',
         'target_class',
         'method',
@@ -40,10 +39,10 @@ class AuditAction extends Model
     ];
 
     /**
-     * @return BelongsTo<AuditableClass, AuditAction>
+     * @return BelongsTo<RecordableClass, RecordAction>
      */
-    public function setAuditableClass(): BelongsTo
+    public function setRecordableClass(): BelongsTo
     {
-        return $this->belongsTo(AuditableClass::class, 'eloise_audit_class_id');
+        return $this->belongsTo(RecordedModel::class, 'eloise_record_class_id');
     }
 }

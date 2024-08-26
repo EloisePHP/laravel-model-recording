@@ -1,12 +1,12 @@
 <?php
 
-namespace Eloise\DataAudit\Tests\Unit\MainFeatures;
+namespace Eloise\RecordModel\Tests\Unit\MainFeatures;
 
-use Eloise\DataAudit\Constants\Actions;
-use Eloise\DataAudit\Constants\AuditableProperties;
-use Eloise\DataAudit\Models\Audit;
-use Eloise\DataAudit\Tests\Fixtures\Models\DefaultAuditableModel;
-use Eloise\DataAudit\Tests\TestCase;
+use Eloise\RecordModel\Constants\Actions;
+use Eloise\RecordModel\Constants\RecordableProperties;
+use Eloise\RecordModel\Models\Record;
+use Eloise\RecordModel\Tests\Fixtures\Models\DefaultRecordableModel;
+use Eloise\RecordModel\Tests\TestCase;
 use Faker\Factory as Faker;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 
 class DefaultModelOperationTest extends TestCase
 {
-    public function test_audits_on_creating_models()
+    public function test_records_on_creating_models()
     {
         $user = $this->createTestUser();
 
@@ -23,34 +23,34 @@ class DefaultModelOperationTest extends TestCase
         $this->assertTrue(Auth::check());
         $this->assertEquals(Auth::id(), $user->id);
 
-        // Creating DefaultAuditableModels
+        // Creating DefaultRecordableModels
         $randomNumber = rand(1, 20);
-        $fakeNames = $this->createTestAuditableModels($randomNumber);
+        $fakeNames = $this->createTestRecordableModels($randomNumber);
 
-        $this->assertEquals($randomNumber, DefaultAuditableModel::count());
+        $this->assertEquals($randomNumber, DefaultRecordableModel::count());
 
         foreach ($fakeNames as $fakeName) {
-            $this->assertDatabaseHas('test_eloise_auditable_model', ['test_name' => $fakeName]);
+            $this->assertDatabaseHas('test_eloise_recordable_model', ['test_name' => $fakeName]);
         }
 
-        // Checking the Audits created
-        $this->assertEquals($randomNumber, Audit::count());
+        // Checking the Records created
+        $this->assertEquals($randomNumber, Record::count());
         foreach ($fakeNames as $fakeName) {
-            $model = DefaultAuditableModel::where(['test_name' => $fakeName])->first();
-            $audits = Audit::where(
+            $model = DefaultRecordableModel::where(['test_name' => $fakeName])->first();
+            $records = Record::where(
                 [
                     'user_id' => $user->id,
                     'source_id' => $model->id
                 ]
             )->get();
-            $this->assertEquals(1, $audits->count());
-            $audit = $audits->first();
-            $this->assertEquals(Actions::ACTION_CREATED, $audit->action);
-            $this->assertEquals($model->getSourceModelClass(), $audit->source_class);
+            $this->assertEquals(1, $records->count());
+            $record = $records->first();
+            $this->assertEquals(Actions::ACTION_CREATED, $record->action);
+            $this->assertEquals($model->getSourceModelClass(), $record->source_class);
         }
     }
 
-    public function test_audits_on_updating_models()
+    public function test_records_on_updating_models()
     {
         $user = $this->createTestUser();
 
@@ -59,47 +59,47 @@ class DefaultModelOperationTest extends TestCase
         $this->assertTrue(Auth::check());
         $this->assertEquals(Auth::id(), $user->id);
 
-        // Creating DefaultAuditableModels
+        // Creating DefaultRecordableModels
         $numberOfCreatedModels = rand(10, 20);
         $numberOfUpdatedModels = rand(1, $numberOfCreatedModels);
 
-        $fakeNames = $this->createTestAuditableModels($numberOfCreatedModels);
+        $fakeNames = $this->createTestRecordableModels($numberOfCreatedModels);
         $randomFakeNames = $this->getSomeRandomFakeNames($fakeNames, $numberOfUpdatedModels);
 
         foreach ($randomFakeNames as $randomFakeName) {
-            $model = DefaultAuditableModel::where(['test_name' => $randomFakeName])->first();
+            $model = DefaultRecordableModel::where(['test_name' => $randomFakeName])->first();
             $model->update(['test_name' => $randomFakeName . ' updated']);
         }
 
-        $totalOfAudits = $numberOfCreatedModels + $numberOfUpdatedModels;
-        $this->assertEquals($totalOfAudits, Audit::count());
+        $totalOfRecords = $numberOfCreatedModels + $numberOfUpdatedModels;
+        $this->assertEquals($totalOfRecords, Record::count());
 
-        // Checking the Audits updated
+        // Checking the Records updated
         foreach ($randomFakeNames as $randomFakeName) {
-            $model = DefaultAuditableModel::where(['test_name' => $randomFakeName . ' updated'])->first();
-            $audits = Audit::where(
+            $model = DefaultRecordableModel::where(['test_name' => $randomFakeName . ' updated'])->first();
+            $records = Record::where(
                 [
                     'user_id' => $user->id,
                     'source_id' => $model->id
                 ]
             )->get();
 
-            $this->assertEquals(2, $audits->count());
+            $this->assertEquals(2, $records->count());
 
-            $auditCreated = $audits->firstWhere('action', Actions::ACTION_CREATED);
-            $this->assertNotEmpty($auditCreated);
-            $this->assertEquals($model->getSourceModelClass(), $auditCreated->source_class);
+            $recordCreated = $records->firstWhere('action', Actions::ACTION_CREATED);
+            $this->assertNotEmpty($recordCreated);
+            $this->assertEquals($model->getSourceModelClass(), $recordCreated->source_class);
 
-            $auditUpdated = $audits->firstWhere('action', Actions::ACTION_UPDATED);
-            $this->assertNotEmpty($auditUpdated);
-            $this->assertEquals($model->getSourceModelClass(), $auditUpdated->source_class);
+            $recordUpdated = $records->firstWhere('action', Actions::ACTION_UPDATED);
+            $this->assertNotEmpty($recordUpdated);
+            $this->assertEquals($model->getSourceModelClass(), $recordUpdated->source_class);
 
             // Checking the diff property everything has been saved correctly
-            $createdChanges = $this->getSpecificAttribute($auditCreated->diff, 'test_name');
-            $updatedChanges = $this->getSpecificAttribute($auditUpdated->diff, 'test_name');
+            $createdChanges = $this->getSpecificAttribute($recordCreated->diff, 'test_name');
+            $updatedChanges = $this->getSpecificAttribute($recordUpdated->diff, 'test_name');
 
-            $this->assertEquals($createdChanges[AuditableProperties::NEW_VALUE], $updatedChanges[AuditableProperties::ORIGINAL_VALUE]);
-            $this->assertEquals($createdChanges[AuditableProperties::NEW_VALUE] . ' updated', $updatedChanges[AuditableProperties::NEW_VALUE]);
+            $this->assertEquals($createdChanges[RecordableProperties::NEW_VALUE], $updatedChanges[RecordableProperties::ORIGINAL_VALUE]);
+            $this->assertEquals($createdChanges[RecordableProperties::NEW_VALUE] . ' updated', $updatedChanges[RecordableProperties::NEW_VALUE]);
         }
     }
 
@@ -114,13 +114,13 @@ class DefaultModelOperationTest extends TestCase
         return $user;
     }
 
-    public function createTestAuditableModels($randomNumber): array
+    public function createTestRecordableModels($randomNumber): array
     {
         $faker = Faker::create();
         $fakeNames = [];
         for ($i = 0; $i < $randomNumber; $i++) {
             $fakeNames[$i] = $faker->name;
-            DefaultAuditableModel::create([
+            DefaultRecordableModel::create([
                 'test_name' => $fakeNames[$i],
             ]);
         }
@@ -147,7 +147,7 @@ class DefaultModelOperationTest extends TestCase
     public function getSpecificAttribute(array $diff, string $attribute): array|null
     {
         foreach ($diff as $value) {
-            if ($value[AuditableProperties::FIELD]==$attribute) {
+            if ($value[RecordableProperties::FIELD]==$attribute) {
                 return $value;
             }
         }

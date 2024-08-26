@@ -1,6 +1,6 @@
 <?php
 
-namespace Eloise\DataAudit\Tests;
+namespace Eloise\RecordModel\Tests;
 
 use Illuminate\Support\ServiceProvider;
 

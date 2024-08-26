@@ -1,16 +1,16 @@
 <?php
 
-namespace Eloise\DataAudit;
+namespace Eloise\RecordModel;
 
-use Eloise\DataAudit\Providers\CommandServiceProvider;
-use Eloise\DataAudit\Providers\ConfigServiceProvider;
-use Eloise\DataAudit\Providers\EventServiceProvider;
-use Eloise\DataAudit\Providers\MigrationServiceProvider;
-use Eloise\DataAudit\Providers\RecordManagerServiceProvider;
-use Eloise\DataAudit\Providers\RollbackManagerServiceProvider;
+use Eloise\RecordModel\Providers\CommandServiceProvider;
+use Eloise\RecordModel\Providers\ConfigServiceProvider;
+use Eloise\RecordModel\Providers\EventServiceProvider;
+use Eloise\RecordModel\Providers\MigrationServiceProvider;
+use Eloise\RecordModel\Providers\RecordManagerServiceProvider;
+use Eloise\RecordModel\Providers\RollbackManagerServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
-class DataAuditServiceProvider extends ServiceProvider
+class RecordModelServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {

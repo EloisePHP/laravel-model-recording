@@ -1,17 +1,17 @@
 <?php
 
-namespace Eloise\DataAudit\Queries;
+namespace Eloise\RecordModel\Queries;
 
 use Carbon\Carbon;
-use Eloise\DataAudit\Constants\Actions;
-use Eloise\DataAudit\Contracts\AuditableModel;
+use Eloise\RecordModel\Constants\Actions;
+use Eloise\RecordModel\Contracts\RecordableModel;
 
 class RollbackQuery
 {
-    public function getCollectionOfDiffs(AuditableModel $model, Carbon|null $dateTime)
+    public function getCollectionOfDiffs(RecordableModel $model, Carbon|null $dateTime)
     {
         /** @var MorphToMany $morphToMany*/
-        $morphToMany = $model->auditsAsSource();
+        $morphToMany = $model->recordsAsSource();
          return $morphToMany->when($dateTime, function ($query) use ($dateTime) {
                                 $query->where('created_at', '>', $dateTime);
          })

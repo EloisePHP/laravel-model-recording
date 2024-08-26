@@ -1,11 +1,11 @@
 <?php
 
-namespace Eloise\DataAudit\Tests\Unit\MainFeatures;
+namespace Eloise\RecordModel\Tests\Unit\MainFeatures;
 
-use Eloise\DataAudit\Contracts\AuditableModel;
-use Eloise\DataAudit\Facades\Rollback;
-use Eloise\DataAudit\Tests\Fixtures\Models\RollbackModel;
-use Eloise\DataAudit\Tests\TestCase;
+use Eloise\RecordModel\Contracts\RecordableModel;
+use Eloise\RecordModel\Facades\Rollback;
+use Eloise\RecordModel\Tests\Fixtures\Models\RollbackModel;
+use Eloise\RecordModel\Tests\TestCase;
 use Faker\Factory as Faker;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Carbon;
@@ -45,9 +45,9 @@ class RollbackFeatureTest extends TestCase
 
         //Fourth day
         Carbon::setTestNow(now()->addDay());
-        $audits = $model->audits();
+        $records = $model->records();
 
-        $this->assertCount(3, $audits);
+        $this->assertCount(3, $records);
 
         $this->rollbackComparer($model,null,false, false, false);
         $this->rollbackComparer($model,now()->subHours(60),false, false, false);
@@ -88,7 +88,7 @@ class RollbackFeatureTest extends TestCase
     }
 
     public function rollbackComparer(
-        AuditableModel $model,
+        RecordableModel $model,
         Carbon|null $momentToRollback,
         bool $nameEqual,
         bool $intEqual,
@@ -111,8 +111,8 @@ class RollbackFeatureTest extends TestCase
     }
 
     protected function compareProperty(
-        AuditableModel $model,
-        AuditableModel $rollbackModel,
+        RecordableModel $model,
+        RecordableModel $rollbackModel,
         string $property,
         bool $shouldEqual
     ) {

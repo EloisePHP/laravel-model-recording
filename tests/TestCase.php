@@ -1,6 +1,6 @@
 <?php
 
-namespace Eloise\DataAudit\Tests;
+namespace Eloise\RecordModel\Tests;
 
 use Illuminate\Support\Facades\Config;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
@@ -8,14 +8,14 @@ use Orchestra\Testbench\TestCase as OrchestraTestCase;
 abstract class TestCase extends OrchestraTestCase
 {
     public const string MODELS_FOLDER_TEST = '/../../../../../tests/Fixtures/Models';
-    public const string PREFIX_CLASS_NAME_TEST = 'Eloise\\DataAudit\\Tests\\Fixtures\\Models\\';
-    public const int AMOUNT_OF_AUDITABLE_MODELS = 3;
+    public const string PREFIX_CLASS_NAME_TEST = 'Eloise\\RecordModel\\Tests\\Fixtures\\Models\\';
+    public const int AMOUNT_OF_RECORDABLE_MODELS = 3;
 
     protected function getPackageProviders($app)
     {
         return [
-            \Eloise\DataAudit\DataAuditServiceProvider::class,
-            \Eloise\DataAudit\Tests\TestMigrationServiceProvider::class,
+            \Eloise\RecordModel\RecordModelServiceProvider::class,
+            \Eloise\RecordModel\Tests\TestMigrationServiceProvider::class,
         ];
     }
 

@@ -1,20 +1,16 @@
 <?php
 
-namespace Eloise\DataAudit\Models;
+namespace Eloise\RecordModel\Models;
 
-use Eloise\DataAudit\Constants\AuditableProperties;
-use Eloise\DataAudit\Traits\Models\AuditRelationships;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Eloise\RecordModel\Constants\RecordableProperties;
+use Eloise\RecordModel\Traits\Models\RecordRelationships;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property int|null $user_id
- * @property int|null $eloise_audit_action_id
+ * @property int|null $eloise_record_action_id
  * @property string $action
  * @property string $source_class
  * @property int $source_id
@@ -28,15 +24,15 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-class Audit extends Model
+class Record extends Model
 {
-    use AuditRelationships;
+    use RecordRelationships;
 
-    protected $table = 'eloise_audit';
+    protected $table = 'eloise_record';
 
     protected $fillable = [
         'user_id',
-        'eloise_audit_action_id',
+        'eloise_record_action_id',
         'action',
         'source_class',
         'source_id',
@@ -79,7 +75,7 @@ class Audit extends Model
     {
         $added = 0;
         foreach ($this->diff as $diff) {
-            if ($diff[AuditableProperties::ORIGINAL_VALUE] === null) {
+            if ($diff[RecordableProperties::ORIGINAL_VALUE] === null) {
                 $added += 1;
             }
         }

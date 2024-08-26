@@ -1,17 +1,17 @@
 <?php
 
-namespace Eloise\DataAudit\Tests\Fixtures\Models;
+namespace Eloise\RecordModel\Tests\Fixtures\Models;
 
-use Eloise\DataAudit\Contracts\AuditableModel;
-use Eloise\DataAudit\Traits\AuditableModelTrait;
+use Eloise\RecordModel\Contracts\RecordableModel;
+use Eloise\RecordModel\Traits\RecordableModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Post extends Model implements AuditableModel
+class Post extends Model implements RecordableModel
 {
     use HasFactory;
-    use AuditableModelTrait;
+    use RecordableModelTrait;
 
     protected $table = 'test_eloise_post';
 

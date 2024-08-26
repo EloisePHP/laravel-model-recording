@@ -1,18 +1,18 @@
 <?php
 
-namespace Eloise\DataAudit\Loaders;
+namespace Eloise\RecordModel\Loaders;
 
-use Eloise\DataAudit\Constants\Actions;
-use Eloise\DataAudit\Contracts\AuditableModel;
-use Eloise\DataAudit\Models\AuditableClass;
-use Eloise\DataAudit\Models\AuditAction;
-use Eloise\DataAudit\Services\AuditableModelContractChecker;
-use Eloise\DataAudit\Services\RelationModelService;
+use Eloise\RecordModel\Constants\Actions;
+use Eloise\RecordModel\Contracts\RecordableModel;
+use Eloise\RecordModel\Models\RecordedModel;
+use Eloise\RecordModel\Models\RecordAction;
+use Eloise\RecordModel\Services\RecordableModelContractChecker;
+use Eloise\RecordModel\Services\RelationModelService;
 
 class LoadActions
 {
     public function __construct(
-        protected AuditableModel|null $auditableModel,
+        protected RecordableModel|null $recordableModel,
     ) {
     }
 
@@ -26,15 +26,15 @@ class LoadActions
     public function loadDefaultActions(): void
     {
         foreach (Actions::DEFAULT_ACTIONS as $action) {
-            $this->updateOrCreateAction($this->auditableModel, ['action' => $action]);
+            $this->updateOrCreateAction($this->recordableModel, ['action' => $action]);
         }
     }
 
     public function loadRelatedActions(): void
     {
-        $checker = new AuditableModelContractChecker();
+        $checker = new RecordableModelContractChecker();
         $relationService = new RelationModelService();
-        $allRelations = $relationService->getAllRelatedModels($this->auditableModel);
+        $allRelations = $relationService->getAllRelatedModels($this->recordableModel);
 
         $allRelations = $checker->arrayCheckerFilter($allRelations);
 
@@ -44,24 +44,31 @@ class LoadActions
                 'target_class' => $relation['related_model'],
                 'method' => $relation['method'],
             ];
-            $this->updateOrCreateAction($this->auditableModel, $options);
+            $this->updateOrCreateAction($this->recordableModel, $options);
         }
     }
 
-    public function updateOrCreateAction(AuditableModel $auditableModel, array $options = []): void
+    /**
+     * @param array{
+     *     action: string,
+     *     target_class?: string,
+     *     method?: string
+     * } $options
+     */
+    public function updateOrCreateAction(RecordableModel $recordableModel, array $options = ['action' => '']): void
     {
-        $className = get_class($auditableModel);
-        $auditableClass = AuditableClass::where(['class_name' => $className])->first();
+        $className = get_class($recordableModel);
+        $recordableClass = RecordedModel::where(['class_name' => $className])->first();
 
-        AuditAction::updateOrCreate(
+        RecordAction::updateOrCreate(
             [
                 'name' => $options['action'],
-                'eloise_audit_class_id' => $auditableClass->id,
+                'eloise_record_class_id' => $recordableClass->id,
             ],
             [
-                'description' => sprintf('%s%s', "Default action for ", $action = $options['action']),
-                'version' => $auditableModel->versionAudit(),
-                'source_class' => get_class($auditableModel),
+                'description' => sprintf('%s%s', "Default action for ", $options['action']),
+                'version' => $recordableModel->versionRecord(),
+                'source_class' => get_class($recordableModel),
                 'target_class' => $options['target_class'] ?? '',
                 'method' => $options['method'] ?? '',
             ]

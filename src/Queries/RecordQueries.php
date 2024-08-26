@@ -1,19 +1,19 @@
 <?php
 
-namespace Eloise\DataAudit\Queries;
+namespace Eloise\RecordModel\Queries;
 
-use Eloise\DataAudit\Constants\Queries;
-use Eloise\DataAudit\Models\Audit;
+use Eloise\RecordModel\Constants\Queries;
+use Eloise\RecordModel\Models\Record;
 
-class AuditQueries
+class RecordQueries
 {
-    public function getAuditFromUserAndModelId(
+    public function getRecordFromUserAndModelId(
         string $modelName,
         int $modelId = null,
         int $userId = null,
         callable $callback
     ): void {
-        $query = Audit::query();
+        $query = Record::query();
 
         $baseCondition = function ($q) use ($modelId, $modelName) {
             if ($modelId !== null) {
@@ -37,8 +37,8 @@ class AuditQueries
         }
 
         $query->orderBy('created_at', 'desc')->orderBy('id', 'desc');
-        $query->chunk(Queries::CHUNK_SIZE, function ($audits) use ($callback) {
-            $shouldContinue = $callback($audits);
+        $query->chunk(Queries::CHUNK_SIZE, function ($records) use ($callback) {
+            $shouldContinue = $callback($records);
 
             if ($shouldContinue === false) {
                 return false;

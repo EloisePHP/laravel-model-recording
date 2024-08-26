@@ -1,8 +1,8 @@
 <?php
 
-namespace Eloise\DataAudit\Constants;
+namespace Eloise\RecordModel\Constants;
 
-class AuditableProperties
+class RecordableProperties
 {
     public const string FIELD = 'attribute';
     public const string ORIGINAL_VALUE = 'original_value';

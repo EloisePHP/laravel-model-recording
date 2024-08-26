@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $this->createAuditActionTable();
+        $this->createRecordActionTable();
     }
 
-    public function createAuditActionTable(): void
+    public function createRecordActionTable(): void
     {
-        Schema::create('eloise_audit_action', function (Blueprint $table) {
+        Schema::create('eloise_record_action', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('eloise_audit_class_id')->constrained('eloise_auditable_class')
+            $table->foreignId('eloise_recorded_model_id')->constrained('eloise_recorded_model')
                     ->onUpdate('cascade')->onDelete('cascade');
             $table->string('name');
             $table->string('source_class');
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('eloise_audit_action');
+        Schema::dropIfExists('eloise_record_action');
     }
 };

@@ -1,6 +1,6 @@
 <?php
 
-namespace Eloise\DataAudit\Constants;
+namespace Eloise\RecordModel\Constants;
 
 class Actions
 {
